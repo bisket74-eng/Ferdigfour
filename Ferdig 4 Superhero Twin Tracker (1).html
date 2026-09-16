@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferdig 4 - Superhero Twin Care Command Center</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Bangers (Comic Title) & Outfit (Modern Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        heroNavy: '#0b0f19',
+                        heroSlate: '#151d30',
+                        heroCard: '#1e293b',
+                        heroBlue: '#2563eb',
+                        heroRed: '#dc2626',
+                        heroGold: '#f59e0b',
+                        heroYellow: '#facc15',
+                        heroCyan: '#06b6d4',
+                        heroPink: '#ec4899',
+                        heroPurple: '#8b5cf6',
+                    },
+                    fontFamily: {
+                        comic: ['Bangers', 'cursive', 'sans-serif'],
+                        body: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(rgba(245, 158, 11, 0.06) 1px, transparent 0),
+                radial-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 0);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+        }
+
+        .font-comic {
+            font-family: 'Bangers', cursive, sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .comic-card {
+            border: 2px solid #334155;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .comic-card:hover {
+            border-color: #475569;
+        }
+
+        .comic-badge {
+            transform: rotate(-2deg);
+            transition: all 0.2s ease;
+        }
+        .comic-badge:hover {
+            transform: rotate(1deg) scale(1.05);
+        }
+
+        .hero-tab-active {
+            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            color: white !important;
+            box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+            border-color: #38bdf8 !important;
+        }
+
+        .sos-glow {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.8); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12 text-slate-100">
+
+    <!-- TOP COMMAND HEADER -->
+    <header class="bg-heroSlate/90 backdrop-blur-md border-b-4 border-heroGold sticky top-0 z-50 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
+                
+                <!-- BRANDING -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-heroRed via-heroGold to-heroYellow rounded-2xl flex items-center justify-center text-slate-950 font-comic text-2xl border-2 border-white shadow-xl transform -rotate-3 flex-shrink-0">
+                        F4
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-comic text-3xl sm:text-4xl text-yellow-400 tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">FERDIG 4</h1>
+                            <span class="bg-heroRed text-white text-xs px-2.5 py-0.5 rounded-full uppercase font-extrabold tracking-wider comic-badge shadow">Twin Ops</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium">Heroic Command Center for Ben, Megan, Eloise & Amelia</p>
+                    </div>
+                </div>
+
+                <!-- ROLE SWITCHER & STATUS BADGE -->
+                <div class="flex flex-wrap items-center justify-center gap-3 bg-slate-950/80 p-2 rounded-2xl border border-slate-700/80">
+                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 flex items-center">
+                        <i class="fa-solid fa-user-gear mr-1.5 text-heroGold"></i> Viewing As:
+                    </div>
+                    
+                    <button id="roleParentsBtn" onclick="setRole('parents')" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 bg-heroBlue text-white shadow-md border border-blue-400">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Parents (Ben & Megan)</span>
+                    </button>
+                    
+                    <button id="roleSquadBtn" onclick="setRole('squad')" class="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 text-slate-400 hover:text-white border border-transparent">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Ally Squad</span>
+                    </button>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="w-full lg:w-auto flex items-center justify-center gap-3">
+                    <button onclick="openSosModal()" class="flex-1 lg:flex-none bg-gradient-to-r from-heroRed to-rose-600 hover:from-red-600 hover:to-rose-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg border border-red-400 flex items-center justify-center space-x-2 transform active:scale-95 transition">
+                        <i class="fa-solid fa-bullhorn text-lg animate-bounce"></i>
+                        <span class="font-comic text-lg leading-none tracking-wide">SQUAD ASSIST SOS</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 flex-grow w-full space-y-6">
+
+        <!-- NAVIGATION TABS & VISIBILITY CONTROLLER BAR -->
+        <div class="bg-heroSlate/80 p-2 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+            <!-- TABS LIST -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none w-full lg:w-auto">
+                <button onclick="switchTab('care')" id="tab-care" class="tab-btn hero-tab-active px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-baby-carriage"></i>
+                    <span>Care Command</span>
+                </button>
+                <button onclick="switchTab('calendar')" id="tab-calendar" class="tab-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>League Calendar</span>
+                </button>
+                <button onclick="switchTab('growth')" id="tab-growth" class="tab-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Growth Metrics</span>
+                </button>
+                <button onclick="switchTab('memories')" id="tab-memories" class="tab-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-camera-retro"></i>
+                    <span>HQ Memories</span>
+                </button>
+                <button onclick="switchTab('grocery')" id="tab-grocery" class="tab-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Super Rations</span>
+                </button>
+                <button id="tab-bills-nav" onclick="switchTab('bills')" class="tab-btn bg-slate-900 text-slate-300 hover:bg-slate-800 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap transition border border-slate-700 flex items-center space-x-2">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Bill Tracker</span>
+                </button>
+            </div>
+
+            <!-- PARENTS VISIBILITY INDICATOR / BANNER -->
+            <div id="parentModeNotice" class="text-xs px-3 py-1.5 rounded-xl bg-heroGold/10 border border-heroGold/30 text-heroYellow font-medium flex items-center space-x-2 hidden sm:flex">
+                <i class="fa-solid fa-eye text-heroGold"></i>
+                <span>Use section toggle icons to show/hide modules from Ally Squad</span>
+            </div>
+        </div>
+
+        <!-- ================= TAB CONTENT 1: CARE COMMAND ================= -->
+        <div id="tab-content-care" class="tab-page space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- LOGGING CONTROLLER CARD -->
+                <div class="lg:col-span-1 bg-heroSlate rounded-3xl p-6 comic-card space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h2 class="font-comic text-2xl text-heroGold flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-heroBlue"></i> LOG ACTION
+                        </h2>
+                        <!-- PRIVACY TOGGLE FOR SECTION -->
+                        <div class="parents-only-control flex items-center space-x-2">
+                            <button onclick="toggleSectionPrivacy('care')" id="privacy-btn-care" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                <i class="fa-solid fa-eye" id="privacy-icon-care"></i>
+                                <span id="privacy-text-care" class="text-[10px] uppercase font-bold">Public</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="careLogForm" onsubmit="saveCareLog(event)" class="space-y-4">
+                        <!-- TARGET TWIN -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Target Hero</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="setLogTarget('Eloise')" id="btnTargetEloise" class="target-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-pink-400 hover:border-pink-500 transition">Eloise</button>
+                                <button type="button" onclick="setLogTarget('Amelia')" id="btnTargetAmelia" class="target-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-purple-400 hover:border-purple-500 transition">Amelia</button>
+                                <button type="button" onclick="setLogTarget('Both')" id="btnTargetBoth" class="target-btn py-2.5 rounded-xl border border-heroBlue font-bold text-xs bg-heroBlue text-white transition">Both Twins</button>
+                            </div>
+                        </div>
+
+                        <!-- LOG TYPE -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Activity Type</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" onclick="setLogType('feed')" id="btnTypeFeed" class="type-btn py-2.5 rounded-xl border border-heroBlue font-bold text-xs bg-heroBlue text-white flex flex-col items-center justify-center gap-1 transition">
+                                    <i class="fa-solid fa-bottle-droplet text-base"></i>
+                                    <span>Feeding</span>
+                                </button>
+                                <button type="button" onclick="setLogType('diaper')" id="btnTypeDiaper" class="type-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-slate-300 flex flex-col items-center justify-center gap-1 transition">
+                                    <i class="fa-solid fa-baby-carriage text-base"></i>
+                                    <span>Diaper</span>
+                                </button>
+                                <button type="button" onclick="setLogType('med')" id="btnTypeMed" class="type-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-slate-300 flex flex-col items-center justify-center gap-1 transition">
+                                    <i class="fa-solid fa-pills text-base"></i>
+                                    <span>Meds/Rx</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- FEEDING SPECIFICS -->
+                        <div id="fieldFeeding" class="space-y-3">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs text-slate-400 font-semibold mb-1">Amount (oz)</label>
+                                    <input type="number" step="0.5" id="feedAmount" placeholder="3.5" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 font-semibold mb-1">Type</label>
+                                    <select id="feedType" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                                        <option value="Formula">Formula</option>
+                                        <option value="Breast Milk (Bottle)">Breast Milk</option>
+                                        <option value="Nursing">Nursing (min)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DIAPER SPECIFICS -->
+                        <div id="fieldDiaper" class="space-y-3 hidden">
+                            <label class="block text-xs text-slate-400 font-semibold mb-1">Diaper Condition</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="bg-slate-900 border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-heroCyan">
+                                    <input type="radio" name="diaperState" value="Wet" checked class="hidden peer">
+                                    <span class="text-xs font-bold text-slate-300 peer-checked:text-heroCyan">💧 Wet</span>
+                                </label>
+                                <label class="bg-slate-900 border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-heroGold">
+                                    <input type="radio" name="diaperState" value="Dirty" class="hidden peer">
+                                    <span class="text-xs font-bold text-slate-300 peer-checked:text-heroGold">💩 Dirty</span>
+                                </label>
+                                <label class="bg-slate-900 border border-slate-700 p-2 rounded-xl text-center cursor-pointer hover:border-heroRed">
+                                    <input type="radio" name="diaperState" value="Both" class="hidden peer">
+                                    <span class="text-xs font-bold text-slate-300 peer-checked:text-heroRed">💥 Both</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- MEDICATION SPECIFICS -->
+                        <div id="fieldMed" class="space-y-3 hidden">
+                            <div>
+                                <label class="block text-xs text-slate-400 font-semibold mb-1">Medication Name</label>
+                                <input type="text" id="medName" placeholder="Vitamin D Drops, Tylenol..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs text-slate-400 font-semibold mb-1">Dose</label>
+                                    <input type="text" id="medDose" placeholder="1 ml" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 font-semibold mb-1">Next Due</label>
+                                    <input type="time" id="medNextTime" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NOTES -->
+                        <div>
+                            <label class="block text-xs text-slate-400 font-semibold mb-1">Hero Notes / Observations</label>
+                            <input type="text" id="logNote" placeholder="Spit up a bit, happy after feeding..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-heroGold to-amber-500 hover:from-yellow-500 hover:to-amber-600 text-slate-950 font-bold py-3 rounded-xl shadow-lg font-comic text-xl uppercase tracking-wider transition transform active:scale-98">
+                            RECORD ACTION
+                        </button>
+                    </form>
+                </div>
+
+                <!-- LIVE TIMELINE FEED -->
+                <div class="lg:col-span-2 bg-heroSlate rounded-3xl p-6 comic-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                            <h2 class="font-comic text-2xl text-white flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-heroGold"></i> LIVE HERO ACTIVITY LOG
+                            </h2>
+                            <div class="flex items-center space-x-1.5">
+                                <button onclick="filterLogs('All')" class="px-2.5 py-1 text-xs rounded-lg bg-slate-900 border border-slate-700 font-bold text-slate-300 hover:bg-slate-800">All</button>
+                                <button onclick="filterLogs('Eloise')" class="px-2.5 py-1 text-xs rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/30 font-bold hover:bg-pink-500/30">Eloise</button>
+                                <button onclick="filterLogs('Amelia')" class="px-2.5 py-1 text-xs rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 font-bold hover:bg-purple-500/30">Amelia</button>
+                            </div>
+                        </div>
+
+                        <div id="logsContainer" class="space-y-3 max-h-[460px] overflow-y-auto pr-2">
+                            <!-- Dynamic Care Logs rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- FOOTER STATS SUMMARY -->
+                    <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-800 text-center mt-4">
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Formula Today</div>
+                            <div class="text-xl font-comic text-heroYellow" id="statTotalOz">24.5 oz</div>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Diapers Changed</div>
+                            <div class="text-xl font-comic text-heroCyan" id="statDiapers">12 Today</div>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+                            <div class="text-[10px] text-slate-400 font-bold uppercase">Last Med Given</div>
+                            <div class="text-xl font-comic text-heroRed" id="statLastMed">8:00 AM</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BROADCAST / SQUAD MESSAGES SECTION -->
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <div>
+                        <h2 class="font-comic text-2xl text-heroCyan flex items-center gap-2">
+                            <i class="fa-solid fa-satellite-dish text-heroRed animate-pulse"></i> SQUAD BROADCASTS & SOS SIGNALS
+                        </h2>
+                        <p class="text-xs text-slate-400">Updates and Squad Assist requests sent to the family</p>
+                    </div>
+                    <button onclick="openSosModal()" class="px-4 py-2 bg-heroRed hover:bg-red-700 text-white font-bold rounded-xl text-xs flex items-center space-x-2 transition shadow-md">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>New Message / SOS</span>
+                    </button>
+                </div>
+
+                <div id="broadcastContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic Messages / SOS signals rendered here -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= TAB CONTENT 2: CALENDAR & APPOINTMENTS ================= -->
+        <div id="tab-content-calendar" class="tab-page hidden space-y-6">
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="font-comic text-3xl text-heroGold flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-check text-heroBlue"></i> LEAGUE CALENDAR & DOCTOR APPOINTMENTS
+                            </h2>
+                            <div class="parents-only-control">
+                                <button onclick="toggleSectionPrivacy('calendar')" id="privacy-btn-calendar" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                    <i class="fa-solid fa-eye" id="privacy-icon-calendar"></i>
+                                    <span id="privacy-text-calendar" class="text-[10px] uppercase font-bold">Public</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Track pediatric visits, vaccine schedules, and family events</p>
+                    </div>
+                    <button onclick="openAddEventModal()" class="bg-heroBlue hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition shadow-md">
+                        <i class="fa-solid fa-calendar-plus text-base"></i>
+                        <span>Schedule Event</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Upcoming Visits & Operations</h3>
+                        <div id="calendarEventsList" class="space-y-3">
+                            <!-- Dynamic Calendar Cards -->
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/80 rounded-2xl p-5 border border-slate-800 space-y-4">
+                        <h3 class="font-comic text-xl text-yellow-400 flex items-center gap-2">
+                            <i class="fa-solid fa-user-doctor text-heroRed"></i> Pediatric HQ Info
+                        </h3>
+                        <div class="space-y-3 text-xs">
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <div class="font-bold text-white text-sm">Sunnyside Pediatric Care</div>
+                                <div class="text-slate-400"><i class="fa-solid fa-phone mr-1"></i> (555) 839-2000</div>
+                                <div class="text-slate-400"><i class="fa-solid fa-location-dot mr-1"></i> 104 Hero Way, Suite 300</div>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <div class="font-bold text-white text-sm">Dr. Sarah Jenkins (Primary)</div>
+                                <div class="text-slate-400"><i class="fa-solid fa-envelope mr-1"></i> drjenkins@pediatrics.org</div>
+                                <div class="text-slate-400"><i class="fa-solid fa-clock mr-1"></i> Hours: M-F 8am - 5pm</div>
+                            </div>
+                            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+                                <div class="font-bold text-heroRed text-sm"><i class="fa-solid fa-truck-medical"></i> 24/7 Nurse Advice Line</div>
+                                <div class="text-slate-300 font-bold">(800) 555-NURSE</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB CONTENT 3: GROWTH CHARTS ================= -->
+        <div id="tab-content-growth" class="tab-page hidden space-y-6">
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="font-comic text-3xl text-heroPink flex items-center gap-2">
+                                <i class="fa-solid fa-chart-area text-heroGold"></i> HERO GROWTH METRICS
+                            </h2>
+                            <div class="parents-only-control">
+                                <button onclick="toggleSectionPrivacy('growth')" id="privacy-btn-growth" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                    <i class="fa-solid fa-eye" id="privacy-icon-growth"></i>
+                                    <span id="privacy-text-growth" class="text-[10px] uppercase font-bold">Public</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Track weight, length, and head circumference for Eloise & Amelia</p>
+                    </div>
+                    <button onclick="openGrowthModal()" class="bg-heroGold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-md">
+                        <i class="fa-solid fa-weight-scale text-base"></i>
+                        <span>Log Growth Record</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- ELOISE METRICS -->
+                    <div class="bg-slate-900/90 rounded-2xl p-5 border-2 border-pink-500/40 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-comic text-2xl text-pink-400 flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-full bg-pink-500/20 text-pink-300 border border-pink-400 text-sm flex items-center justify-center font-bold">E</span>
+                                Eloise's Stats
+                            </h3>
+                            <span class="text-xs text-slate-400" id="eloiseLastGrowthDate">Updated: Today</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Weight</div>
+                                <div class="text-xl font-comic text-white" id="eloiseWeight">7 lbs 4 oz</div>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Length</div>
+                                <div class="text-xl font-comic text-white" id="eloiseHeight">19.5 in</div>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Head Size</div>
+                                <div class="text-xl font-comic text-white" id="eloiseHead">13.8 in</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950/60 rounded-xl text-xs text-slate-300">
+                            <strong>Percentile:</strong> ~50th Percentile • Healthy superhero development!
+                        </div>
+                    </div>
+
+                    <!-- AMELIA METRICS -->
+                    <div class="bg-slate-900/90 rounded-2xl p-5 border-2 border-purple-500/40 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-comic text-2xl text-purple-400 flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400 text-sm flex items-center justify-center font-bold">A</span>
+                                Amelia's Stats
+                            </h3>
+                            <span class="text-xs text-slate-400" id="ameliaLastGrowthDate">Updated: Today</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Weight</div>
+                                <div class="text-xl font-comic text-white" id="ameliaWeight">6 lbs 14 oz</div>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Length</div>
+                                <div class="text-xl font-comic text-white" id="ameliaHeight">19.1 in</div>
+                            </div>
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-center">
+                                <div class="text-[10px] text-slate-400 font-bold uppercase">Head Size</div>
+                                <div class="text-xl font-comic text-white" id="ameliaHead">13.5 in</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-slate-950/60 rounded-xl text-xs text-slate-300">
+                            <strong>Percentile:</strong> ~45th Percentile • Strong twin progress!
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Growth History Records</h3>
+                    <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-900 text-slate-300 font-bold uppercase">
+                                <tr>
+                                    <th class="p-3">Date</th>
+                                    <th class="p-3">Hero</th>
+                                    <th class="p-3">Weight</th>
+                                    <th class="p-3">Length</th>
+                                    <th class="p-3">Head Size</th>
+                                    <th class="p-3">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="growthTableBody" class="divide-y divide-slate-800 text-slate-300">
+                                <!-- Dynamic Growth History Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= TAB CONTENT 4: HQ MEMORIES (GALLERY) ================= -->
+        <div id="tab-content-memories" class="tab-page hidden space-y-6">
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="font-comic text-3xl text-heroYellow flex items-center gap-2">
+                                <i class="fa-solid fa-camera-retro text-heroRed"></i> TWIN HQ PHOTO MEMORIES
+                            </h2>
+                            <div class="parents-only-control">
+                                <button onclick="toggleSectionPrivacy('memories')" id="privacy-btn-memories" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                    <i class="fa-solid fa-eye" id="privacy-icon-memories"></i>
+                                    <span id="privacy-text-memories" class="text-[10px] uppercase font-bold">Public</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Share special superhero photos with parents and the Ally Squad</p>
+                    </div>
+                    <button onclick="openPhotoUploadModal()" class="bg-gradient-to-r from-heroRed to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-md">
+                        <i class="fa-solid fa-cloud-arrow-up text-base"></i>
+                        <span>Upload Photo Memory</span>
+                    </button>
+                </div>
+
+                <div id="galleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Dynamic Photo Gallery Cards -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB CONTENT 5: GROCERY & RATIONS ================= -->
+        <div id="tab-content-grocery" class="tab-page hidden space-y-6">
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="font-comic text-3xl text-heroCyan flex items-center gap-2">
+                                <i class="fa-solid fa-cart-shopping text-heroGold"></i> SUPER RATIONS & GROCERY LIST
+                            </h2>
+                            <div class="parents-only-control">
+                                <button onclick="toggleSectionPrivacy('grocery')" id="privacy-btn-grocery" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                    <i class="fa-solid fa-eye" id="privacy-icon-grocery"></i>
+                                    <span id="privacy-text-grocery" class="text-[10px] uppercase font-bold">Public</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Collaborative shopping list for diapers, formula, and squad supplies</p>
+                    </div>
+                    
+                    <form onsubmit="addGroceryItem(event)" class="flex gap-2 w-full sm:w-auto">
+                        <input type="text" id="groceryInput" placeholder="Add needed item (e.g., Size 1 Diapers)..." class="bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-white text-xs focus:outline-none focus:border-heroCyan w-full sm:w-64" required>
+                        <button type="submit" class="bg-heroCyan hover:bg-cyan-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider font-comic text-base flex-shrink-0">
+                            ADD
+                        </button>
+                    </form>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-900/80 rounded-2xl p-5 border border-slate-800 space-y-3">
+                        <h3 class="font-comic text-xl text-heroYellow flex items-center justify-between">
+                            <span><i class="fa-solid fa-circle-exclamation text-heroRed mr-2"></i> NEEDED SUPPLIES</span>
+                            <span id="neededCount" class="text-xs bg-heroRed/20 text-heroRed px-2.5 py-0.5 rounded-full font-sans">0 Items</span>
+                        </h3>
+                        <ul id="groceryNeededList" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
+                            <!-- Dynamic needed items -->
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900/80 rounded-2xl p-5 border border-slate-800 space-y-3">
+                        <h3 class="font-comic text-xl text-slate-400 flex items-center justify-between">
+                            <span><i class="fa-solid fa-circle-check text-green-400 mr-2"></i> SECURED RATIONS</span>
+                            <button onclick="clearCompletedGrocery()" class="text-xs text-slate-400 hover:text-slate-200 font-sans underline">Clear Purchased</button>
+                        </h3>
+                        <ul id="grocerySecuredList" class="space-y-2 max-h-[380px] overflow-y-auto pr-1 opacity-75">
+                            <!-- Dynamic completed items -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB CONTENT 6: BILL TRACKER (PARENTS ONLY DEFAULT) ================= -->
+        <div id="tab-content-bills" class="tab-page hidden space-y-6">
+            <div class="bg-heroSlate rounded-3xl p-6 comic-card space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center space-x-3">
+                            <h2 class="font-comic text-3xl text-heroYellow flex items-center gap-2">
+                                <i class="fa-solid fa-file-invoice-dollar text-heroBlue"></i> PARENT BILL & EXPENSE TRACKER
+                            </h2>
+                            <div class="parents-only-control">
+                                <button onclick="toggleSectionPrivacy('bills')" id="privacy-btn-bills" title="Toggle Ally Squad Visibility" class="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-red-400 flex items-center space-x-1 hover:border-slate-500 transition">
+                                    <i class="fa-solid fa-eye-slash" id="privacy-icon-bills"></i>
+                                    <span id="privacy-text-bills" class="text-[10px] uppercase font-bold">Parents Only</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400">Track diaper subscriptions, medical bills, formula costs & daycare</p>
+                    </div>
+
+                    <button onclick="openAddBillModal()" class="bg-heroGold hover:bg-yellow-500 text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs flex items-center space-x-2 transition shadow-md">
+                        <i class="fa-solid fa-plus text-base"></i>
+                        <span>Add Expense / Bill</span>
+                    </button>
+                </div>
+
+                <div class="bg-slate-950 rounded-2xl border border-slate-800 overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-slate-300 font-bold uppercase">
+                            <tr>
+                                <th class="p-3">Expense Name</th>
+                                <th class="p-3">Category</th>
+                                <th class="p-3">Amount</th>
+                                <th class="p-3">Due Date</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billsTableBody" class="divide-y divide-slate-800 text-slate-300">
+                            <!-- Dynamic Bill Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 text-center">
+                        <div class="text-xs text-slate-400 font-bold uppercase">Total Monthly Twin Bills</div>
+                        <div class="text-2xl font-comic text-heroYellow" id="statTotalBills">$0.00</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 text-center">
+                        <div class="text-xs text-slate-400 font-bold uppercase">Pending Unpaid</div>
+                        <div class="text-2xl font-comic text-heroRed" id="statPendingBills">$0.00</div>
+                    </div>
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 text-center">
+                        <div class="text-xs text-slate-400 font-bold uppercase">Paid This Month</div>
+                        <div class="text-2xl font-comic text-green-400" id="statPaidBills">$0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= MODALS CONTAINER ================= -->
+
+    <!-- SQUAD ASSIST SOS BROADCAST MODAL -->
+    <div id="sosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-heroSlate border-2 border-heroRed rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-comic text-2xl text-heroRed flex items-center gap-2">
+                    <i class="fa-solid fa-bullhorn animate-pulse"></i> SQUAD ASSIST SOS
+                </h3>
+                <button onclick="closeModal('sosModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveSosBroadcast(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Request Type</label>
+                    <select id="sosCategory" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroRed">
+                        <option value="Squad Assist SOS">🚨 Squad Assist SOS (Babysitting / Urgent Help)</option>
+                        <option value="Meal Support">🍲 Squad Meal Support</option>
+                        <option value="Supply Drop">🍼 Supply / Grocery Drop-off</option>
+                        <option value="General Update">📢 General Family Update</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Date & Time Needed</label>
+                    <input type="text" id="sosDateTime" placeholder="e.g., Friday, Oct 24th @ 6:00 PM - 10:00 PM" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroRed" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Details & Message to Ally Squad</label>
+                    <textarea id="sosMessage" rows="3" placeholder="Ben & Megan need a hand at HQ! Let us know if anyone from the Ally Squad is available to assist..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroRed" required></textarea>
+                </div>
+                <button type="submit" class="w-full bg-heroRed hover:bg-red-700 text-white font-comic text-xl py-3 rounded-xl shadow-lg uppercase tracking-wider transition">
+                    BROADCAST TO ALLY SQUAD
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- CALENDAR EVENT MODAL -->
+    <div id="eventModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-heroSlate border-2 border-heroBlue rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-comic text-2xl text-heroBlue flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus"></i> SCHEDULE LEAGUE EVENT
+                </h3>
+                <button onclick="closeModal('eventModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveCalendarEvent(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Event Title</label>
+                    <input type="text" id="eventTitle" placeholder="e.g. 2-Month Well Baby Checkup" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue" required>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Target Hero</label>
+                        <select id="eventTarget" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue">
+                            <option value="Both Twins">Both Twins</option>
+                            <option value="Eloise">Eloise</option>
+                            <option value="Amelia">Amelia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Category</label>
+                        <select id="eventCategory" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue">
+                            <option value="Doctor Visit">Pediatric Doctor</option>
+                            <option value="Vaccination">Vaccination / Immunization</option>
+                            <option value="Milestone">Growth Milestone</option>
+                            <option value="Family Outing">Family Outing</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Date</label>
+                        <input type="date" id="eventDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Time</label>
+                        <input type="time" id="eventTime" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Location / Notes</label>
+                    <input type="text" id="eventLocation" placeholder="Sunnyside Pediatrics - Clinic Room 4" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroBlue">
+                </div>
+                <button type="submit" class="w-full bg-heroBlue hover:bg-blue-600 text-white font-comic text-xl py-3 rounded-xl shadow-lg uppercase tracking-wider transition">
+                    SAVE TO CALENDAR
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- GROWTH LOG MODAL -->
+    <div id="growthModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-heroSlate border-2 border-heroGold rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-comic text-2xl text-heroGold flex items-center gap-2">
+                    <i class="fa-solid fa-weight-scale"></i> RECORD GROWTH METRICS
+                </h3>
+                <button onclick="closeModal('growthModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveGrowthLog(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Target Hero</label>
+                    <select id="growthTarget" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                        <option value="Eloise">Eloise</option>
+                        <option value="Amelia">Amelia</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Weight (Lbs / Oz)</label>
+                        <input type="text" id="growthWeight" placeholder="7 lbs 4 oz" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Length (Inches)</label>
+                        <input type="text" id="growthHeight" placeholder="19.5 in" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Head Size (Inches)</label>
+                    <input type="text" id="growthHead" placeholder="13.8 in" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Doctor Remarks</label>
+                    <input type="text" id="growthNotes" placeholder="Healthy gain, top 50 percentile" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                </div>
+                <button type="submit" class="w-full bg-heroGold hover:bg-yellow-500 text-slate-950 font-comic text-xl py-3 rounded-xl shadow-lg uppercase tracking-wider transition">
+                    UPDATE STATS
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PHOTO UPLOAD MODAL -->
+    <div id="photoModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-heroSlate border-2 border-heroPink rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-comic text-2xl text-heroPink flex items-center gap-2">
+                    <i class="fa-solid fa-camera"></i> SHARE PHOTO MEMORY
+                </h3>
+                <button onclick="closeModal('photoModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="savePhotoMemory(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Caption / Title</label>
+                    <input type="text" id="photoTitle" placeholder="First matching superhero onesies!" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroPink" required>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Hero(es) Featured</label>
+                    <select id="photoTarget" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroPink">
+                        <option value="Both Twins">Eloise & Amelia</option>
+                        <option value="Eloise">Eloise</option>
+                        <option value="Amelia">Amelia</option>
+                        <option value="Whole Family">Ben, Megan & Twins</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Image URL</label>
+                    <input type="url" id="photoUrl" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroPink">
+                    <p class="text-[10px] text-slate-400 mt-1">Leave blank to use an automatic twin photo card placeholder!</p>
+                </div>
+                <button type="submit" class="w-full bg-heroPink hover:bg-pink-600 text-white font-comic text-xl py-3 rounded-xl shadow-lg uppercase tracking-wider transition">
+                    POST TO GALLERY
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BILL MODAL -->
+    <div id="billModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-heroSlate border-2 border-heroGold rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-comic text-2xl text-heroGold flex items-center gap-2">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> ADD TWIN EXPENSE
+                </h3>
+                <button onclick="closeModal('billModal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="saveBill(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Expense Title</label>
+                    <input type="text" id="billName" placeholder="Diaper Auto-Ship / Co-pay..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold" required>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Category</label>
+                        <select id="billCategory" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold">
+                            <option value="Diapers & Wipes">Diapers & Wipes</option>
+                            <option value="Formula & Food">Formula & Food</option>
+                            <option value="Medical / Doctor">Medical / Doctor</option>
+                            <option value="Gear & Clothing">Gear & Clothing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 font-semibold mb-1">Amount ($)</label>
+                        <input type="number" step="0.01" id="billAmount" placeholder="85.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 font-semibold mb-1">Due Date</label>
+                    <input type="date" id="billDueDate" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-heroGold" required>
+                </div>
+                <button type="submit" class="w-full bg-heroGold hover:bg-yellow-500 text-slate-950 font-comic text-xl py-3 rounded-xl shadow-lg uppercase tracking-wider transition">
+                    SAVE EXPENSE
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APPLICATION JAVASCRIPT STATE ENGINE -->
+    <script>
+        // APP STATE
+        let appState = {
+            currentRole: 'parents', // 'parents' or 'squad'
+            activeTab: 'care',
+            logTarget: 'Both',
+            logType: 'feed',
+            privacySettings: {
+                care: true,      // true = public to Ally Squad
+                calendar: true,
+                growth: true,
+                memories: true,
+                grocery: true,
+                bills: false     // false = parents only default
+            },
+            logs: [],
+            broadcasts: [],
+            calendar: [],
+            growth: {
+                Eloise: { weight: '7 lbs 4 oz', height: '19.5 in', head: '13.8 in', date: 'Today' },
+                Amelia: { weight: '6 lbs 14 oz', height: '19.1 in', head: '13.5 in', date: 'Today' }
+            },
+            growthHistory: [],
+            photos: [],
+            groceries: [],
+            bills: []
+        };
+
+        // INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLocalStorageData();
+            renderAll();
+        });
+
+        function loadLocalStorageData() {
+            const saved = localStorage.getItem('ferdig4_appState');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    appState = { ...appState, ...parsed };
+                } catch (e) {
+                    console.error("Error loading saved state", e);
+                }
+            } else {
+                seedInitialData();
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('ferdig4_appState', JSON.stringify(appState));
+        }
+
+        function seedInitialData() {
+            appState.logs = [
+                { id: 1, target: 'Both', type: 'feed', details: 'Formula - 3.5 oz each', note: 'Fed smoothly, both fell asleep!', time: '10:30 AM', timestamp: Date.now() - 3600000 },
+                { id: 2, target: 'Eloise', type: 'diaper', details: 'Diaper Condition: Both', note: 'Changed without fuss', time: '09:15 AM', timestamp: Date.now() - 7200000 },
+                { id: 3, target: 'Amelia', type: 'med', details: 'Vitamin D Drops (1 ml)', note: 'Morning supplement given', time: '08:00 AM', timestamp: Date.now() - 11000000 }
+            ];
+
+            appState.broadcasts = [
+                { id: 1, category: 'Squad Assist SOS', author: 'Ben & Megan', datetime: 'Friday, 6:00 PM - 10:00 PM', message: 'Ben & Megan date night Squad Assist SOS request! Is anyone available from the Ally Squad to take watch at HQ?', responses: ['Grandma & Grandpa: We can definitely cover watch on Friday!'], timestamp: Date.now() - 10000000 }
+            ];
+
+            appState.calendar = [
+                { id: 1, title: '2-Month Pediatric Well Checkup', target: 'Both Twins', category: 'Doctor Visit', date: '2026-10-05', time: '10:00 AM', location: 'Sunnyside Pediatrics Room 4' },
+                { id: 2, title: 'First Vaccine Booster Series', target: 'Both Twins', category: 'Vaccination', date: '2026-10-12', time: '02:30 PM', location: 'Pediatric Clinic' }
+            ];
+
+            appState.growthHistory = [
+                { id: 1, target: 'Eloise', weight: '7 lbs 4 oz', height: '19.5 in', head: '13.8 in', notes: 'Routine checkup stats', date: '2026-09-10' },
+                { id: 2, target: 'Amelia', weight: '6 lbs 14 oz', height: '19.1 in', head: '13.5 in', notes: 'Routine checkup stats', date: '2026-09-10' }
+            ];
+
+            appState.photos = [
+                { id: 1, title: 'Matching Superhero Cape Onesies!', target: 'Both Twins', url: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80', date: 'Just Now' },
+                { id: 2, title: 'Eloise Smiling in Sleep', target: 'Eloise', url: 'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=600&q=80', date: 'Yesterday' }
+            ];
+
+            appState.groceries = [
+                { id: 1, name: 'Newborn / Size 1 Diapers (Large Pack)', done: false },
+                { id: 2, name: 'Hypoallergenic Baby Wipes (12pk)', done: false },
+                { id: 3, name: 'Gentle Formula Refills', done: true },
+                { id: 4, name: 'Quick Snacks for Ben & Megan', done: false }
+            ];
+
+            appState.bills = [
+                { id: 1, name: 'Monthly Diaper Subscription', category: 'Diapers & Wipes', amount: 89.99, dueDate: '2026-10-01', paid: true },
+                { id: 2, name: 'Pediatric Specialist Co-Pay', category: 'Medical / Doctor', amount: 45.00, dueDate: '2026-10-15', paid: false },
+                { id: 3, name: 'Twin Stroller Accessory Pack', category: 'Gear & Clothing', amount: 120.00, dueDate: '2026-10-20', paid: false }
+            ];
+
+            saveState();
+        }
+
+        function setRole(role) {
+            appState.currentRole = role;
+            const pBtn = document.getElementById('roleParentsBtn');
+            const sBtn = document.getElementById('roleSquadBtn');
+
+            if (role === 'parents') {
+                pBtn.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 bg-heroBlue text-white shadow-md border border-blue-400";
+                sBtn.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 text-slate-400 hover:text-white border border-transparent";
+                
+                document.querySelectorAll('.parents-only-control').forEach(el => el.classList.remove('hidden'));
+                document.getElementById('parentModeNotice').classList.remove('hidden');
+                document.getElementById('tab-bills-nav').classList.remove('hidden');
+            } else {
+                sBtn.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 bg-heroGold text-slate-950 shadow-md border border-yellow-300";
+                pBtn.className = "px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2 text-slate-400 hover:text-white border border-transparent";
+                
+                document.querySelectorAll('.parents-only-control').forEach(el => el.classList.add('hidden'));
+                document.getElementById('parentModeNotice').classList.add('hidden');
+                
+                // If Bill Tracker is private, hide the tab in Ally Squad mode
+                if (!appState.privacySettings.bills) {
+                    document.getElementById('tab-bills-nav').classList.add('hidden');
+                    if (appState.activeTab === 'bills') switchTab('care');
+                }
+            }
+
+            updateVisibilityUI();
+            renderAll();
+        }
+
+        function switchTab(tabId) {
+            // Check if section is restricted in Squad mode
+            if (appState.currentRole === 'squad' && !appState.privacySettings[tabId]) {
+                return;
+            }
+
+            appState.activeTab = tabId;
+            document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('hero-tab-active');
+                btn.classList.add('bg-slate-900', 'text-slate-300');
+            });
+
+            const activeContent = document.getElementById(`tab-content-${tabId}`);
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-900', 'text-slate-300');
+                activeBtn.classList.add('hero-tab-active');
+            }
+        }
+
+        function toggleSectionPrivacy(sectionKey) {
+            appState.privacySettings[sectionKey] = !appState.privacySettings[sectionKey];
+            saveState();
+            updateVisibilityUI();
+        }
+
+        function updateVisibilityUI() {
+            Object.keys(appState.privacySettings).forEach(key => {
+                const isPublic = appState.privacySettings[key];
+                const btn = document.getElementById(`privacy-btn-${key}`);
+                const icon = document.getElementById(`privacy-icon-${key}`);
+                const text = document.getElementById(`privacy-text-${key}`);
+                const tabNav = document.getElementById(`tab-${key}-nav`);
+
+                if (btn && icon && text) {
+                    if (isPublic) {
+                        btn.className = "text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-green-400 flex items-center space-x-1 hover:border-slate-500 transition";
+                        icon.className = "fa-solid fa-eye";
+                        text.innerText = "Public";
+                    } else {
+                        btn.className = "text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-red-400 flex items-center space-x-1 hover:border-slate-500 transition";
+                        icon.className = "fa-solid fa-eye-slash";
+                        text.innerText = "Parents Only";
+                    }
+                }
+
+                // Hide/show tabs in Ally Squad view
+                if (key === 'bills' && tabNav) {
+                    if (appState.currentRole === 'squad' && !isPublic) {
+                        tabNav.classList.add('hidden');
+                    } else {
+                        tabNav.classList.remove('hidden');
+                    }
+                }
+            });
+        }
+
+        function setLogTarget(target) {
+            appState.logTarget = target;
+            document.querySelectorAll('.target-btn').forEach(btn => {
+                btn.className = "target-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-slate-300 hover:border-slate-500 transition";
+            });
+            if (target === 'Eloise') {
+                document.getElementById('btnTargetEloise').className = "target-btn py-2.5 rounded-xl border border-pink-500 font-bold text-xs bg-pink-500/20 text-pink-300 transition";
+            } else if (target === 'Amelia') {
+                document.getElementById('btnTargetAmelia').className = "target-btn py-2.5 rounded-xl border border-purple-500 font-bold text-xs bg-purple-500/20 text-purple-300 transition";
+            } else {
+                document.getElementById('btnTargetBoth').className = "target-btn py-2.5 rounded-xl border border-heroBlue font-bold text-xs bg-heroBlue text-white transition";
+            }
+        }
+
+        function setLogType(type) {
+            appState.logType = type;
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.className = "type-btn py-2.5 rounded-xl border border-slate-700 font-bold text-xs bg-slate-900 text-slate-300 flex flex-col items-center justify-center gap-1 transition";
+            });
+
+            document.getElementById('fieldFeeding').classList.add('hidden');
+            document.getElementById('fieldDiaper').classList.add('hidden');
+            document.getElementById('fieldMed').classList.add('hidden');
+
+            if (type === 'feed') {
+                document.getElementById('btnTypeFeed').className = "type-btn py-2.5 rounded-xl border border-heroBlue font-bold text-xs bg-heroBlue text-white flex flex-col items-center justify-center gap-1 transition";
+                document.getElementById('fieldFeeding').classList.remove('hidden');
+            } else if (type === 'diaper') {
+                document.getElementById('btnTypeDiaper').className = "type-btn py-2.5 rounded-xl border border-heroGold font-bold text-xs bg-heroGold text-slate-950 flex flex-col items-center justify-center gap-1 transition";
+                document.getElementById('fieldDiaper').classList.remove('hidden');
+            } else if (type === 'med') {
+                document.getElementById('btnTypeMed').className = "type-btn py-2.5 rounded-xl border border-heroRed font-bold text-xs bg-heroRed text-white flex flex-col items-center justify-center gap-1 transition";
+                document.getElementById('fieldMed').classList.remove('hidden');
+            }
+        }
+
+        function saveCareLog(e) {
+            e.preventDefault();
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let details = '';
+
+            if (appState.logType === 'feed') {
+                const amt = document.getElementById('feedAmount').value || '3';
+                const fType = document.getElementById('feedType').value;
+                details = `${fType} - ${amt} oz`;
+            } else if (appState.logType === 'diaper') {
+                const cond = document.querySelector('input[name="diaperState"]:checked').value;
+                details = `Diaper Condition: ${cond}`;
+            } else if (appState.logType === 'med') {
+                const mName = document.getElementById('medName').value || 'Supplement';
+                const mDose = document.getElementById('medDose').value || '1 dose';
+                details = `${mName} (${mDose})`;
+            }
+
+            const newLog = {
+                id: Date.now(),
+                target: appState.logTarget,
+                type: appState.logType,
+                details: details,
+                note: document.getElementById('logNote').value || 'No extra notes',
+                time: timeStr,
+                timestamp: Date.now()
+            };
+
+            appState.logs.unshift(newLog);
+            saveState();
+            renderLogs();
+            document.getElementById('careLogForm').reset();
+        }
+
+        function renderLogs(filter = 'All') {
+            const container = document.getElementById('logsContainer');
+            if (!container) return;
+
+            let filtered = appState.logs;
+            if (filter !== 'All') {
+                filtered = appState.logs.filter(l => l.target === filter || l.target === 'Both');
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-500 italic">No care logs recorded for ${filter} yet!</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(log => {
+                let badgeColor = "bg-heroBlue text-white";
+                let icon = "fa-bottle-droplet";
+                
+                if (log.type === 'diaper') {
+                    badgeColor = "bg-heroGold text-slate-950";
+                    icon = "fa-baby-carriage";
+                } else if (log.type === 'med') {
+                    badgeColor = "bg-heroRed text-white";
+                    icon = "fa-pills";
+                }
+
+                let targetBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300">Both Twins</span>`;
+                if (log.target === 'Eloise') {
+                    targetBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-pink-500/20 text-pink-300 border border-pink-500/30">Eloise</span>`;
+                } else if (log.target === 'Amelia') {
+                    targetBadge = `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">Amelia</span>`;
+                }
+
+                return `
+                    <div class="bg-slate-900/80 p-3.5 rounded-2xl border border-slate-800 flex items-center justify-between hover:border-slate-700 transition">
+                        <div class="flex items-center space-x-3.5">
+                            <div class="w-10 h-10 rounded-xl ${badgeColor} flex items-center justify-center text-lg shadow-md flex-shrink-0">
+                                <i class="fa-solid ${icon}"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="font-bold text-white text-sm">${log.details}</span>
+                                    ${targetBadge}
+                                </div>
+                                <div class="text-xs text-slate-400 mt-0.5">${log.note}</div>
+                            </div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-xs font-bold text-heroYellow">${log.time}</div>
+                            <button onclick="deleteLog(${log.id})" class="text-[10px] text-slate-500 hover:text-heroRed mt-1">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterLogs(target) { renderLogs(target); }
+
+        function deleteLog(id) {
+            appState.logs = appState.logs.filter(l => l.id !== id);
+            saveState();
+            renderLogs();
+        }
+
+        function saveSosBroadcast(e) {
+            e.preventDefault();
+            const category = document.getElementById('sosCategory').value;
+            const datetime = document.getElementById('sosDateTime').value;
+            const message = document.getElementById('sosMessage').value;
+
+            const newBroadcast = {
+                id: Date.now(),
+                category: category,
+                author: 'Ben & Megan',
+                datetime: datetime,
+                message: message,
+                responses: [],
+                timestamp: Date.now()
+            };
+
+            appState.broadcasts.unshift(newBroadcast);
+            saveState();
+            renderBroadcasts();
+            closeModal('sosModal');
+        }
+
+        function renderBroadcasts() {
+            const container = document.getElementById('broadcastContainer');
+            if (!container) return;
+
+            if (appState.broadcasts.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-500 italic col-span-2">No active broadcasts or SOS alerts.</div>`;
+                return;
+            }
+
+            container.innerHTML = appState.broadcasts.map(b => {
+                const isSos = b.category.includes('SOS') || b.category.includes('Assist');
+                const borderStyle = isSos ? 'border-2 border-heroRed bg-red-950/20' : 'border border-slate-800 bg-slate-900/80';
+                
+                return `
+                    <div class="rounded-2xl p-4 ${borderStyle} space-y-3 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full ${isSos ? 'bg-heroRed text-white' : 'bg-heroBlue text-white'}">
+                                    ${b.category}
+                                </span>
+                                <span class="text-[11px] text-slate-400 font-semibold">${b.datetime}</span>
+                            </div>
+                            <p class="text-sm text-slate-200 font-medium mt-2.5">${b.message}</p>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800 space-y-2">
+                            <div class="text-[11px] text-slate-400 font-bold uppercase">Squad Responses (${b.responses.length})</div>
+                            ${b.responses.map(r => `<div class="text-xs bg-slate-950/80 p-2 rounded-lg text-heroYellow border border-slate-800">${r}</div>`).join('')}
+                            
+                            <div class="flex gap-2 pt-1">
+                                <input type="text" id="respInput-${b.id}" placeholder="Reply to parents..." class="bg-slate-950 text-xs border border-slate-800 rounded-lg px-2.5 py-1.5 text-white w-full focus:outline-none">
+                                <button onclick="addResponse(${b.id})" class="bg-heroGold text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs hover:bg-yellow-500">Reply</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addResponse(id) {
+            const input = document.getElementById(`respInput-${id}`);
+            if (!input || !input.value.trim()) return;
+
+            const item = appState.broadcasts.find(b => b.id === id);
+            if (item) {
+                const author = appState.currentRole === 'parents' ? 'Ben/Megan' : 'Ally Squad';
+                item.responses.push(`${author}: ${input.value.trim()}`);
+                saveState();
+                renderBroadcasts();
+            }
+        }
+
+        function saveCalendarEvent(e) {
+            e.preventDefault();
+            const newEvt = {
+                id: Date.now(),
+                title: document.getElementById('eventTitle').value,
+                target: document.getElementById('eventTarget').value,
+                category: document.getElementById('eventCategory').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                location: document.getElementById('eventLocation').value || 'N/A'
+            };
+
+            appState.calendar.push(newEvt);
+            saveState();
+            renderCalendar();
+            closeModal('eventModal');
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendarEventsList');
+            if (!container) return;
+
+            if (appState.calendar.length === 0) {
+                container.innerHTML = `<div class="p-6 text-center text-slate-500 italic">No scheduled appointments.</div>`;
+                return;
+            }
+
+            container.innerHTML = appState.calendar.map(e => `
+                <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-800 flex items-center justify-between">
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-white text-base">${e.title}</span>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-heroBlue/30 text-heroCyan border border-heroBlue/40">${e.category}</span>
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            <i class="fa-solid fa-clock text-heroGold mr-1"></i> ${e.date} at ${e.time} • <strong>${e.target}</strong>
+                        </div>
+                        <div class="text-xs text-slate-400">
+                            <i class="fa-solid fa-location-dot text-heroRed mr-1"></i> ${e.location}
+                        </div>
+                    </div>
+                    <button onclick="deleteEvent(${e.id})" class="text-slate-500 hover:text-heroRed p-2"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function deleteEvent(id) {
+            appState.calendar = appState.calendar.filter(e => e.id !== id);
+            saveState();
+            renderCalendar();
+        }
+
+        function saveGrowthLog(e) {
+            e.preventDefault();
+            const target = document.getElementById('growthTarget').value;
+            const w = document.getElementById('growthWeight').value;
+            const h = document.getElementById('growthHeight').value;
+            const head = document.getElementById('growthHead').value;
+            const notes = document.getElementById('growthNotes').value || 'Routine check';
+
+            appState.growth[target] = { weight: w, height: h, head: head, date: new Date().toLocaleDateString() };
+            appState.growthHistory.unshift({
+                id: Date.now(),
+                target: target,
+                weight: w,
+                height: h,
+                head: head,
+                notes: notes,
+                date: new Date().toLocaleDateString()
+            });
+
+            saveState();
+            renderGrowth();
+            closeModal('growthModal');
+        }
+
+        function renderGrowth() {
+            if (appState.growth.Eloise) {
+                document.getElementById('eloiseWeight').innerText = appState.growth.Eloise.weight;
+                document.getElementById('eloiseHeight').innerText = appState.growth.Eloise.height;
+                document.getElementById('eloiseHead').innerText = appState.growth.Eloise.head;
+            }
+            if (appState.growth.Amelia) {
+                document.getElementById('ameliaWeight').innerText = appState.growth.Amelia.weight;
+                document.getElementById('ameliaHeight').innerText = appState.growth.Amelia.height;
+                document.getElementById('ameliaHead').innerText = appState.growth.Amelia.head;
+            }
+
+            const tableBody = document.getElementById('growthTableBody');
+            if (tableBody) {
+                tableBody.innerHTML = appState.growthHistory.map(gh => `
+                    <tr class="hover:bg-slate-900/60">
+                        <td class="p-3">${gh.date}</td>
+                        <td class="p-3 font-bold ${gh.target === 'Eloise' ? 'text-pink-400' : 'text-purple-400'}">${gh.target}</td>
+                        <td class="p-3">${gh.weight}</td>
+                        <td class="p-3">${gh.height}</td>
+                        <td class="p-3">${gh.head}</td>
+                        <td class="p-3 text-slate-400">${gh.notes}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        function savePhotoMemory(e) {
+            e.preventDefault();
+            const title = document.getElementById('photoTitle').value;
+            const target = document.getElementById('photoTarget').value;
+            let url = document.getElementById('photoUrl').value;
+
+            if (!url) {
+                url = 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=600&q=80';
+            }
+
+            appState.photos.unshift({
+                id: Date.now(),
+                title: title,
+                target: target,
+                url: url,
+                date: 'Just Now'
+            });
+
+            saveState();
+            renderPhotos();
+            closeModal('photoModal');
+        }
+
+        function renderPhotos() {
+            const container = document.getElementById('galleryContainer');
+            if (!container) return;
+
+            container.innerHTML = appState.photos.map(p => `
+                <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-lg group hover:border-heroGold transition">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${p.url}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Ferdig+4+Hero+Memory'">
+                        <span class="absolute top-2 right-2 bg-slate-950/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-full">
+                            ${p.target}
+                        </span>
+                    </div>
+                    <div class="p-4 space-y-1">
+                        <h4 class="font-bold text-white text-base">${p.title}</h4>
+                        <div class="text-xs text-slate-400 flex justify-between">
+                            <span>Posted by Family</span>
+                            <span>${p.date}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addGroceryItem(e) {
+            e.preventDefault();
+            const input = document.getElementById('groceryInput');
+            if (!input.value.trim()) return;
+
+            appState.groceries.unshift({
+                id: Date.now(),
+                name: input.value.trim(),
+                done: false
+            });
+
+            input.value = '';
+            saveState();
+            renderGroceries();
+        }
+
+        function toggleGrocery(id) {
+            const item = appState.groceries.find(g => g.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveState();
+                renderGroceries();
+            }
+        }
+
+        function clearCompletedGrocery() {
+            appState.groceries = appState.groceries.filter(g => !g.done);
+            saveState();
+            renderGroceries();
+        }
+
+        function renderGroceries() {
+            const neededList = document.getElementById('groceryNeededList');
+            const securedList = document.getElementById('grocerySecuredList');
+            if (!neededList || !securedList) return;
+
+            const needed = appState.groceries.filter(g => !g.done);
+            const secured = appState.groceries.filter(g => g.done);
+
+            document.getElementById('neededCount').innerText = `${needed.length} Items`;
+
+            neededList.innerHTML = needed.map(g => `
+                <li class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between group">
+                    <span class="text-xs text-white font-medium">${g.name}</span>
+                    <button onclick="toggleGrocery(${g.id})" class="px-2.5 py-1 bg-heroBlue hover:bg-blue-600 text-white rounded-lg text-xs font-bold">
+                        Got It
+                    </button>
+                </li>
+            `).join('');
+
+            securedList.innerHTML = secured.map(g => `
+                <li class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/50 flex items-center justify-between line-through text-slate-400">
+                    <span class="text-xs">${g.name}</span>
+                    <button onclick="toggleGrocery(${g.id})" class="text-xs text-slate-500 hover:text-white">Undo</button>
+                </li>
+            `).join('');
+        }
+
+        function saveBill(e) {
+            e.preventDefault();
+            const newBill = {
+                id: Date.now(),
+                name: document.getElementById('billName').value,
+                category: document.getElementById('billCategory').value,
+                amount: parseFloat(document.getElementById('billAmount').value) || 0,
+                dueDate: document.getElementById('billDueDate').value,
+                paid: false
+            };
+
+            appState.bills.push(newBill);
+            saveState();
+            renderBills();
+            closeModal('billModal');
+        }
+
+        function toggleBillPaid(id) {
+            const b = appState.bills.find(x => x.id === id);
+            if (b) {
+                b.paid = !b.paid;
+                saveState();
+                renderBills();
+            }
+        }
+
+        function renderBills() {
+            const tableBody = document.getElementById('billsTableBody');
+            if (!tableBody) return;
+
+            let total = 0;
+            let pending = 0;
+            let paid = 0;
+
+            tableBody.innerHTML = appState.bills.map(b => {
+                total += b.amount;
+                if (b.paid) paid += b.amount;
+                else pending += b.amount;
+
+                return `
+                    <tr class="hover:bg-slate-900/60">
+                        <td class="p-3 font-bold text-white">${b.name}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] bg-slate-900 text-slate-300 border border-slate-800">${b.category}</span></td>
+                        <td class="p-3 font-comic text-base text-heroYellow">$${b.amount.toFixed(2)}</td>
+                        <td class="p-3 text-slate-400">${b.dueDate}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${b.paid ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-red-500/20 text-red-400 border border-red-500/30'}">
+                                ${b.paid ? 'Paid' : 'Unpaid'}
+                            </span>
+                        </td>
+                        <td class="p-3 text-right">
+                            <button onclick="toggleBillPaid(${b.id})" class="text-xs px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-slate-200 rounded-lg border border-slate-800">
+                                ${b.paid ? 'Mark Unpaid' : 'Mark Paid'}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('statTotalBills').innerText = `$${total.toFixed(2)}`;
+            document.getElementById('statPendingBills').innerText = `$${pending.toFixed(2)}`;
+            document.getElementById('statPaidBills').innerText = `$${paid.toFixed(2)}`;
+        }
+
+        function renderAll() {
+            renderLogs();
+            renderBroadcasts();
+            renderCalendar();
+            renderGrowth();
+            renderPhotos();
+            renderGroceries();
+            renderBills();
+            updateVisibilityUI();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        
+        function openSosModal() { openModal('sosModal'); }
+        function openAddEventModal() { openModal('eventModal'); }
+        function openGrowthModal() { openModal('growthModal'); }
+        function openPhotoUploadModal() { openModal('photoModal'); }
+        function openAddBillModal() { openModal('billModal'); }
+    </script>
+</body>
+</html>
