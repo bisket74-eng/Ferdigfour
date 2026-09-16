@@ -1,630 +1,2567 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Ferdig 4 - Twin Ops Tracker</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-​<script>
+
+<script>
 tailwind.config = {
-theme: {
-extend: {
-fontFamily: {
-comic: ['Bangers', 'cursive'],
-body: ['Outfit', 'sans-serif']
-},
-colors: {
-navy: '#0b0f19',
-eloise: '#9333ea',
-amelia: '#16a34a'
-}
-}
-}
-}
+    theme: {
+        extend: {
+            fontFamily: {
+                comic: ['Bangers', 'cursive'],
+                body: ['Outfit', 'sans-serif']
+            },
+            colors: {
+                navy: '#0b0f19',
+                eloise: '#9333ea',
+                amelia: '#16a34a'
+            }
+        }
+    }
+};
 </script>
+
 <style>
 body {
-font-family: 'Outfit', sans-serif;
-background-color: #0b0f19;
-color: #f3f4f6;
--webkit-tap-highlight-color: transparent;
+    font-family: 'Outfit', sans-serif;
+    background-color: #0b0f19;
+    color: #f3f4f6;
+    -webkit-tap-highlight-color: transparent;
 }
+
 .comic-border {
-border: 2px solid #334155;
-box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    border: 2px solid #334155;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
 }
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-​.border-gradient-both {
-border: 2px solid transparent;
-background-clip: padding-box, border-box;
-background-origin: padding-box, border-box;
-background-image: linear-gradient(#020617, #020617), linear-gradient(to right, #9333ea, #16a34a);
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
-​select {
-appearance: none;
--webkit-appearance: none;
-background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-background-repeat: no-repeat;
-background-position: right 0.75rem center;
-background-size: 1em;
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.border-gradient-both {
+    border: 2px solid transparent;
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    background-image:
+        linear-gradient(#020617, #020617),
+        linear-gradient(to right, #9333ea, #16a34a);
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+}
+
+input,
+select,
+button {
+    font-family: inherit;
+}
+
+button {
+    -webkit-user-select: none;
+    user-select: none;
 }
 </style>
+
 </head>
+
 <body class="min-h-screen flex flex-col text-slate-100">
-​<header class="bg-slate-900 border-b-2 border-amber-500 sticky top-0 z-50 shadow-md">
-<div class="max-w-7xl mx-auto px-3 py-2">
-<div class="flex items-center justify-between">
-<div class="flex items-center space-x-3">
-<div class="w-12 h-12 bg-gradient-to-br from-red-600 to-amber-500 rounded-lg flex items-center justify-center text-black font-comic text-3xl transform -rotate-3 shadow-md border border-red-700">F4</div>
-<div class="leading-none">
-<h1 class="font-comic text-4xl text-amber-400 tracking-wide m-0 drop-shadow-md">FERDIG 4</h1>
-<p class="text-[12px] text-slate-300 font-bold tracking-wider mt-0.5 uppercase">Ben, Megan, Eloise & Amelia</p>
-</div>
-</div>
-<button onclick="openModal('sosModal')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md flex items-center border border-red-400 comic-border active:scale-95 transition">
-<i class="fa-solid fa-bullhorn mr-1 animate-pulse"></i> SOS
-</button>
-</div>
-​<div class="mt-3 flex justify-center">
-<div class="flex items-center bg-slate-950 rounded-full p-1 border border-slate-700 w-full max-w-sm relative">
-<button id="role-parents" onclick="setRole('parents')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all bg-blue-600 text-white z-10 shadow-sm">
-<i class="fa-solid fa-user-shield mr-1"></i>Parents (Ben & Megan)
-</button>
-<button id="role-squad" onclick="setRole('squad')" class="flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10">
-<i class="fa-solid fa-users mr-1"></i>Ally Squad
-</button>
-</div>
-</div>
-</div>
+
+<!-- ================= HEADER ================= -->
+
+<header class="bg-slate-900 border-b-2 border-amber-500 sticky top-0 z-50 shadow-md">
+
+    <div class="max-w-7xl mx-auto px-3 py-2">
+
+        <div class="flex items-center justify-between">
+
+            <div class="flex items-center space-x-3">
+
+                <div class="w-12 h-12 bg-gradient-to-br from-red-600 to-amber-500 rounded-lg flex items-center justify-center text-black font-comic text-3xl transform -rotate-3 shadow-md border border-red-700">
+                    F4
+                </div>
+
+                <div class="leading-none">
+                    <h1 class="font-comic text-4xl text-amber-400 tracking-wide m-0 drop-shadow-md">
+                        FERDIG 4
+                    </h1>
+
+                    <p class="text-[12px] text-slate-300 font-bold tracking-wider mt-0.5 uppercase">
+                        Ben, Megan, Eloise & Amelia
+                    </p>
+                </div>
+
+            </div>
+
+            <button
+                onclick="openModal('sosModal')"
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md flex items-center border border-red-400 comic-border active:scale-95 transition"
+            >
+                <i class="fa-solid fa-bullhorn mr-1 animate-pulse"></i>
+                SOS
+            </button>
+
+        </div>
+
+        <!-- ROLE SWITCH -->
+
+        <div class="mt-3 flex justify-center">
+
+            <div class="flex items-center bg-slate-950 rounded-full p-1 border border-slate-700 w-full max-w-sm relative">
+
+                <button
+                    id="role-parents"
+                    onclick="setRole('parents')"
+                    class="flex-1 py-2 rounded-full text-sm font-bold transition-all bg-blue-600 text-white z-10 shadow-sm"
+                >
+                    <i class="fa-solid fa-user-shield mr-1"></i>
+                    Parents (Ben & Megan)
+                </button>
+
+                <button
+                    id="role-squad"
+                    onclick="setRole('squad')"
+                    class="flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10"
+                >
+                    <i class="fa-solid fa-users mr-1"></i>
+                    Ally Squad
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </header>
-​<div class="bg-slate-900/90 border-b border-slate-800 shadow-sm sticky top-[110px] z-40 backdrop-blur-md">
-<div class="max-w-7xl mx-auto px-2 overflow-x-auto no-scrollbar flex space-x-2 py-2">
-<button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn bg-blue-600 text-white px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-blue-500 transition shadow-sm">Dashboard</button>
-<button onclick="switchTab('calendar')" id="tab-calendar" class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition">Calendar</button>
-<button onclick="switchTab('growth')" id="tab-growth" class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition">Growth</button>
-<button onclick="switchTab('memories')" id="tab-memories" class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition">Memories</button>
-<button onclick="switchTab('grocery')" id="tab-grocery" class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition">Grocery</button>
-<button onclick="switchTab('bills')" id="tab-bills" class="tab-btn parents-only bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition">Bill Tracker</button>
+
+
+<!-- ================= NAVIGATION ================= -->
+
+<div class="bg-slate-900/90 border-b border-slate-800 shadow-sm sticky top-[110px] z-40 backdrop-blur-md">
+
+    <div class="max-w-7xl mx-auto px-2 overflow-x-auto no-scrollbar flex space-x-2 py-2">
+
+        <button
+            onclick="switchTab('dashboard')"
+            id="tab-dashboard"
+            class="tab-btn bg-blue-600 text-white px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-blue-500 transition shadow-sm"
+        >
+            Dashboard
+        </button>
+
+        <button
+            onclick="switchTab('calendar')"
+            id="tab-calendar"
+            class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition"
+        >
+            Calendar
+        </button>
+
+        <button
+            onclick="switchTab('growth')"
+            id="tab-growth"
+            class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition"
+        >
+            Growth
+        </button>
+
+        <button
+            onclick="switchTab('memories')"
+            id="tab-memories"
+            class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition"
+        >
+            Memories
+        </button>
+
+        <button
+            onclick="switchTab('grocery')"
+            id="tab-grocery"
+            class="tab-btn bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition"
+        >
+            Grocery
+        </button>
+
+        <button
+            onclick="switchTab('bills')"
+            id="tab-bills"
+            class="tab-btn parents-only bg-slate-800 text-slate-300 px-5 py-2.5 rounded-md font-bold text-sm whitespace-nowrap border border-slate-700 transition"
+        >
+            Bill Tracker
+        </button>
+
+    </div>
+
 </div>
-</div>
-​<main class="max-w-7xl mx-auto p-3 flex-grow w-full">
-​<!-- ================= DASHBOARD ================= -->
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="max-w-7xl mx-auto p-3 flex-grow w-full">
+
+
+<!-- ========================================================= -->
+<!-- DASHBOARD -->
+<!-- ========================================================= -->
+
 <div id="view-dashboard" class="view-section flex flex-col gap-3 w-full">
-<button id="toggle-log-btn" onclick="toggleSection('log-form-container', 'toggle-log-btn', 'Log Action')" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-amber-500/50 flex items-center justify-center gap-2 active:scale-95">
-<i class="fa-solid fa-plus-circle text-lg"></i> <span>Log Action</span>
-</button>
-​<div id="log-form-container" class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-lg transition-all">
-<form onsubmit="saveDashboardLog(event)" class="space-y-4">
-<div class="flex gap-1.5 bg-slate-950 p-1.5 rounded-full border border-slate-800">
-<button type="button" onclick="setDashboardTwin('Eloise')" id="tgt-Eloise" class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all">Eloise</button>
-<button type="button" onclick="setDashboardTwin('Amelia')" id="tgt-Amelia" class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all">Amelia</button>
-<button type="button" onclick="setDashboardTwin('Both')" id="tgt-Both" class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all">Both</button>
+
+    <!-- LOG ACTION PILL -->
+
+    <button
+        id="toggle-log-btn"
+        onclick="toggleSection('log-form-container','toggle-log-btn','Log Action')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-amber-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Log Action</span>
+    </button>
+
+
+    <!-- LOG FORM -->
+
+    <div
+        id="log-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-lg"
+    >
+
+        <form onsubmit="saveDashboardLog(event)" class="space-y-4">
+
+            <!-- TWIN -->
+
+            <div class="flex gap-1.5 bg-slate-950 p-1.5 rounded-full border border-slate-800">
+
+                <button
+                    type="button"
+                    onclick="setDashboardTwin('Eloise')"
+                    id="tgt-Eloise"
+                    class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all"
+                >
+                    Eloise
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setDashboardTwin('Amelia')"
+                    id="tgt-Amelia"
+                    class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all"
+                >
+                    Amelia
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setDashboardTwin('Both')"
+                    id="tgt-Both"
+                    class="tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all"
+                >
+                    Both
+                </button>
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            <div class="grid grid-cols-3 gap-2">
+
+                <button
+                    type="button"
+                    onclick="setDashboardAction('feed')"
+                    id="act-feed"
+                    class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all"
+                >
+                    <i class="fa-solid fa-bottle-droplet text-2xl mb-1"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider">Feed</span>
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setDashboardAction('diaper')"
+                    id="act-diaper"
+                    class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all"
+                >
+                    <i class="fa-solid fa-baby-carriage text-2xl mb-1"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider">Diaper</span>
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setDashboardAction('med')"
+                    id="act-med"
+                    class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all"
+                >
+                    <i class="fa-solid fa-pills text-2xl mb-1"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider">Med</span>
+                </button>
+
+            </div>
+
+
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-3">
+
+                <!-- TIME -->
+
+                <div class="flex items-center bg-slate-900 rounded-md border border-slate-700 overflow-hidden">
+
+                    <span class="px-3 text-slate-400">
+                        <i class="fa-regular fa-clock"></i>
+                    </span>
+
+                    <input
+                        type="time"
+                        id="log-time"
+                        class="flex-grow bg-transparent p-3 text-lg text-white focus:outline-none"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- FEED -->
+
+                <div id="form-feed" class="dynamic-form flex items-center gap-2">
+
+                    <select
+                        id="feed-amount"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-blue-500 outline-none pr-8 cursor-pointer"
+                    ></select>
+
+                    <span class="text-slate-400 text-sm px-2 font-bold">oz</span>
+
+                </div>
+
+
+                <!-- DIAPER -->
+
+                <div id="form-diaper" class="dynamic-form hidden flex gap-2">
+
+                    <button
+                        type="button"
+                        id="diaper-wet"
+                        onclick="setDiaper('Wet')"
+                        class="flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all active:scale-95"
+                    >
+                        Wet
+                    </button>
+
+                    <button
+                        type="button"
+                        id="diaper-dirty"
+                        onclick="setDiaper('Dirty')"
+                        class="flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all active:scale-95"
+                    >
+                        Dirty
+                    </button>
+
+                    <input type="hidden" id="diaper-status" value="">
+
+                </div>
+
+
+                <!-- MED -->
+
+                <div id="form-med" class="dynamic-form hidden space-y-3">
+
+                    <div class="flex items-center gap-2">
+
+                        <select
+                            id="med-amount"
+                            class="w-1/2 bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-emerald-500 outline-none pr-8 cursor-pointer"
+                        ></select>
+
+                        <select
+                            id="med-unit"
+                            class="w-1/2 bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-emerald-500 outline-none pr-8 cursor-pointer"
+                        >
+                            <option value="ml">ml</option>
+                            <option value="tsp">tsp</option>
+                            <option value="oz">oz</option>
+                            <option value="drops">drops</option>
+                        </select>
+
+                    </div>
+
+                    <input
+                        type="text"
+                        id="med-type"
+                        placeholder="Medication Name"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-md p-3 text-base text-white focus:border-emerald-500 outline-none"
+                    >
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="flex items-center bg-slate-900 rounded-md border border-slate-700 focus-within:border-amber-500 transition-colors">
+
+                    <input
+                        type="text"
+                        id="log-notes"
+                        placeholder="Notes (optional)..."
+                        class="flex-grow bg-transparent p-3 text-base text-white focus:outline-none"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="startDictation('log-notes')"
+                        class="p-3 text-slate-400 hover:text-amber-400 transition-colors"
+                        title="Voice to Text"
+                    >
+                        <i class="fa-solid fa-microphone text-xl"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-3 rounded-lg text-base uppercase tracking-wider shadow-md comic-border transition-colors active:scale-95"
+            >
+                Record Action
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- LIVE ACTIVITY -->
+
+    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700 flex flex-col mt-2">
+
+        <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
+
+            <h2 class="font-comic text-2xl text-white tracking-wide">
+                LIVE ACTIVITY
+            </h2>
+
+            <button
+                onclick="openModal('clearLogsModal')"
+                class="text-red-500 bg-red-950/30 hover:bg-red-900/50 px-3 py-1.5 rounded-md text-xs font-bold border border-red-900 transition"
+            >
+                <i class="fa-solid fa-trash mr-1"></i>
+                Clear
+            </button>
+
+        </div>
+
+        <div id="logs-container" class="space-y-3"></div>
+
+    </div>
+
 </div>
-​<div class="grid grid-cols-3 gap-2">
-<button type="button" onclick="setDashboardAction('feed')" id="act-feed" class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all">
-<i class="fa-solid fa-bottle-droplet text-2xl mb-1"></i>
-<span class="text-xs font-bold uppercase tracking-wider">Feed</span>
-</button>
-<button type="button" onclick="setDashboardAction('diaper')" id="act-diaper" class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all">
-<i class="fa-solid fa-baby-carriage text-2xl mb-1"></i>
-<span class="text-xs font-bold uppercase tracking-wider">Diaper</span>
-</button>
-<button type="button" onclick="setDashboardAction('med')" id="act-med" class="act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all">
-<i class="fa-solid fa-pills text-2xl mb-1"></i>
-<span class="text-xs font-bold uppercase tracking-wider">Med</span>
-</button>
-</div>
-​<div class="bg-slate-950 p-3 rounded-lg border border-slate-800 space-y-3">
-<div class="flex items-center bg-slate-900 rounded-md border border-slate-700 overflow-hidden">
-<span class="px-3 text-slate-400"><i class="fa-regular fa-clock"></i></span>
-<input type="time" id="log-time" class="flex-grow bg-transparent p-3 text-lg text-white focus:outline-none" required>
-</div>
-​<div id="form-feed" class="dynamic-form flex items-center gap-2">
-<select id="feed-amount" class="w-full bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-blue-500 outline-none pr-8 cursor-pointer"></select>
-<span class="text-slate-400 text-sm px-2 font-bold">oz</span>
-</div>
-​<div id="form-diaper" class="dynamic-form hidden flex gap-2">
-<button type="button" id="diaper-wet" onclick="setDiaper('Wet')" class="flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all active:scale-95">Wet</button>
-<button type="button" id="diaper-dirty" onclick="setDiaper('Dirty')" class="flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all active:scale-95">Dirty</button>
-<input type="hidden" id="diaper-status" value="">
-</div>
-​<div id="form-med" class="dynamic-form hidden space-y-3">
-<div class="flex items-center gap-2">
-<select id="med-amount" class="w-1/2 bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-emerald-500 outline-none pr-8 cursor-pointer"></select>
-<select id="med-unit" class="w-1/2 bg-slate-900 border border-slate-700 rounded-md p-3 text-lg text-white focus:border-emerald-500 outline-none pr-8 cursor-pointer">
-<option value="ml">ml</option>
-<option value="tsp">tsp</option>
-<option value="oz">oz</option>
-<option value="drops">drops</option>
-</select>
-</div>
-<input type="text" id="med-type" placeholder="Medication Name" class="w-full bg-slate-900 border border-slate-700 rounded-md p-3 text-base text-white focus:border-emerald-500 outline-none">
-</div>
-​<div class="flex items-center bg-slate-900 rounded-md border border-slate-700 focus-within:border-amber-500 transition-colors">
-<input type="text" id="log-notes" placeholder="Notes (optional)..." class="flex-grow bg-transparent p-3 text-base text-white focus:outline-none">
-<button type="button" onclick="startDictation('log-notes')" class="p-3 text-slate-400 hover:text-amber-400 transition-colors" title="Voice to Text">
-<i class="fa-solid fa-microphone text-xl"></i>
-</button>
-</div>
-</div>
-​<button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold py-3 rounded-lg text-base uppercase tracking-wider shadow-md comic-border transition-colors active:scale-95">Record Action</button>
-</form>
-</div>
-​<div class="bg-slate-900/80 p-3 rounded-xl border border-slate-700 flex flex-col mt-2">
-<div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
-<h2 class="font-comic text-2xl text-white tracking-wide">LIVE ACTIVITY</h2>
-<button onclick="openModal('clearLogsModal')" class="text-red-500 bg-red-950/30 hover:bg-red-900/50 px-3 py-1.5 rounded-md text-xs font-bold border border-red-900 transition"><i class="fa-solid fa-trash mr-1"></i>Clear</button>
-</div>
-<div id="logs-container" class="space-y-3"></div>
-</div>
-</div>
-​<!-- ================= CALENDAR ================= -->
+
+
+<!-- ========================================================= -->
+<!-- CALENDAR -->
+<!-- ========================================================= -->
+
 <div id="view-calendar" class="view-section hidden flex-col gap-4">
-<button id="toggle-cal-btn" onclick="toggleSection('cal-form-container', 'toggle-cal-btn', 'Schedule Appointment')" class="w-full bg-slate-800 hover:bg-slate-700 text-blue-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-blue-500/50 flex items-center justify-center gap-2 active:scale-95">
-<i class="fa-solid fa-plus-circle text-lg"></i> <span>Schedule Appointment</span>
-</button>
-​<div id="cal-form-container" class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md">
-<form onsubmit="saveAppointment(event)" class="space-y-3">
-<div class="flex gap-2">
-<input type="date" id="cal-date" required class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<input type="time" id="cal-time" required class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white">
+
+    <button
+        id="toggle-cal-btn"
+        onclick="toggleSection('cal-form-container','toggle-cal-btn','Schedule Appointment')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-blue-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-blue-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Schedule Appointment</span>
+    </button>
+
+
+    <div
+        id="cal-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md"
+    >
+
+        <form onsubmit="saveAppointment(event)" class="space-y-3">
+
+            <div class="flex gap-2">
+
+                <input
+                    type="date"
+                    id="cal-date"
+                    required
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white"
+                >
+
+                <input
+                    type="time"
+                    id="cal-time"
+                    required
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white"
+                >
+
+            </div>
+
+            <select
+                id="cal-twin"
+                class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white"
+            >
+                <option value="Eloise">Eloise</option>
+                <option value="Amelia">Amelia</option>
+                <option value="Both">Both Twins</option>
+            </select>
+
+            <input
+                type="text"
+                id="cal-desc"
+                placeholder="Dr. Smith - Checkup"
+                required
+                class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white"
+            >
+
+            <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95"
+            >
+                Add Appointment
+            </button>
+
+        </form>
+
+    </div>
+
+    <div id="calendar-list" class="space-y-3"></div>
+
 </div>
-<select id="cal-twin" class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<option value="Eloise">Eloise</option>
-<option value="Amelia">Amelia</option>
-<option value="Both">Both Twins</option>
-</select>
-<input type="text" id="cal-desc" placeholder="Dr. Smith - Checkup" required class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95">Add Appointment</button>
-</form>
-</div>
-<div id="calendar-list" class="space-y-3"></div>
-</div>
-​<!-- ================= GROWTH ================= -->
+
+
+<!-- ========================================================= -->
+<!-- GROWTH -->
+<!-- ========================================================= -->
+
 <div id="view-growth" class="view-section hidden flex-col gap-4">
-<button id="toggle-grow-btn" onclick="toggleSection('grow-form-container', 'toggle-grow-btn', 'Log Growth Metric')" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-emerald-500/50 flex items-center justify-center gap-2 active:scale-95">
-<i class="fa-solid fa-plus-circle text-lg"></i> <span>Log Growth Metric</span>
-</button>
-​<div id="grow-form-container" class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md">
-<form onsubmit="saveGrowth(event)" class="space-y-3">
-<div class="flex gap-2">
-<input type="date" id="grow-date" required class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<select id="grow-twin" class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<option value="Eloise" class="text-purple-400 font-bold">Eloise</option>
-<option value="Amelia" class="text-green-400 font-bold">Amelia</option>
-</select>
+
+    <button
+        id="toggle-grow-btn"
+        onclick="toggleSection('grow-form-container','toggle-grow-btn','Log Growth Metric')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-emerald-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Log Growth Metric</span>
+    </button>
+
+
+    <div
+        id="grow-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md"
+    >
+
+        <form onsubmit="saveGrowth(event)" class="space-y-3">
+
+            <div class="flex gap-2">
+
+                <input
+                    type="date"
+                    id="grow-date"
+                    required
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white"
+                >
+
+                <select
+                    id="grow-twin"
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white"
+                >
+                    <option value="Eloise">Eloise</option>
+                    <option value="Amelia">Amelia</option>
+                </select>
+
+            </div>
+
+            <div class="flex gap-2">
+
+                <div class="w-1/2 relative">
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        id="grow-weight"
+                        placeholder="Weight"
+                        required
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white pr-8"
+                    >
+
+                    <span class="absolute right-3 top-3 text-slate-500">
+                        lbs
+                    </span>
+
+                </div>
+
+                <div class="w-1/2 relative">
+
+                    <input
+                        type="number"
+                        step="0.25"
+                        id="grow-height"
+                        placeholder="Length"
+                        required
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white pr-8"
+                    >
+
+                    <span class="absolute right-3 top-3 text-slate-500">
+                        in
+                    </span>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95"
+            >
+                Save Metrics
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+
+        <table class="w-full text-left text-sm">
+
+            <thead>
+
+                <tr class="text-slate-400 border-b border-slate-800">
+
+                    <th class="pb-2">Date</th>
+                    <th class="pb-2">Twin</th>
+                    <th class="pb-2">Wght</th>
+                    <th class="pb-2">Lngth</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody
+                id="growth-list"
+                class="divide-y divide-slate-800/50"
+            ></tbody>
+
+        </table>
+
+    </div>
+
 </div>
-<div class="flex gap-2">
-<div class="w-1/2 relative">
-<input type="number" step="0.1" id="grow-weight" placeholder="Weight" required class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white pr-8">
-<span class="absolute right-3 top-3 text-slate-500">lbs</span>
-</div>
-<div class="w-1/2 relative">
-<input type="number" step="0.25" id="grow-height" placeholder="Length" required class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white pr-8">
-<span class="absolute right-3 top-3 text-slate-500">in</span>
-</div>
-</div>
-<button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95">Save Metrics</button>
-</form>
-</div>
-<div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-<table class="w-full text-left text-sm">
-<thead>
-<tr class="text-slate-400 border-b border-slate-800">
-<th class="pb-2">Date</th>
-<th class="pb-2">Twin</th>
-<th class="pb-2">Wght</th>
-<th class="pb-2">Lngth</th>
-</tr>
-</thead>
-<tbody id="growth-list" class="divide-y divide-slate-800/50"></tbody>
-</table>
-</div>
-</div>
-​<!-- ================= MEMORIES ================= -->
+
+
+<!-- ========================================================= -->
+<!-- MEMORIES -->
+<!-- ========================================================= -->
+
 <div id="view-memories" class="view-section hidden flex-col gap-4">
-<div class="bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md text-center">
-<h3 class="font-comic text-2xl text-amber-400 mb-2">HQ PHOTO GALLERY</h3>
-<label class="block w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-full cursor-pointer transition shadow-md active:scale-95 uppercase text-sm tracking-wider">
-<i class="fa-solid fa-cloud-arrow-up text-lg mr-2"></i> Upload Photo Memory
-<input type="file" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)">
-</label>
+
+    <!-- UPLOAD PILL -->
+
+    <button
+        id="toggle-photo-btn"
+        onclick="toggleSection('photo-form-container','toggle-photo-btn','Upload Photo Memory')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-pink-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-pink-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Upload Photo Memory</span>
+    </button>
+
+
+    <!-- PHOTO FORM -->
+
+    <div
+        id="photo-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md text-center"
+    >
+
+        <label
+            class="block w-full bg-pink-600 hover:bg-pink-500 text-white font-bold py-3 rounded-full cursor-pointer transition shadow-md active:scale-95 uppercase text-sm tracking-wider"
+        >
+            <i class="fa-solid fa-cloud-arrow-up text-lg mr-2"></i>
+            Choose Photo
+
+            <input
+                type="file"
+                accept="image/*"
+                class="hidden"
+                onchange="handlePhotoUpload(event)"
+            >
+        </label>
+
+    </div>
+
+
+    <div id="photo-gallery" class="grid grid-cols-2 gap-3"></div>
+
 </div>
-<div id="photo-gallery" class="grid grid-cols-2 gap-3"></div>
-</div>
-​<!-- ================= GROCERY ================= -->
+
+
+<!-- ========================================================= -->
+<!-- GROCERY -->
+<!-- ========================================================= -->
+
 <div id="view-grocery" class="view-section hidden flex-col gap-4">
-<button id="toggle-groc-btn" onclick="toggleSection('groc-form-container', 'toggle-groc-btn', 'Add Grocery Item')" class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-amber-500/50 flex items-center justify-center gap-2 active:scale-95">
-<i class="fa-solid fa-plus-circle text-lg"></i> <span>Add Grocery Item</span>
-</button>
-​<div id="groc-form-container" class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md">
-<form onsubmit="saveGrocery(event)" class="flex gap-2">
-<input type="text" id="grocery-item" placeholder="Diapers, Formula..." required class="flex-grow bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<button type="submit" class="bg-amber-500 text-black px-5 rounded font-bold active:scale-95">Add</button>
-</form>
+
+    <button
+        id="toggle-groc-btn"
+        onclick="toggleSection('groc-form-container','toggle-groc-btn','Add Grocery Item')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-amber-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-amber-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Add Grocery Item</span>
+    </button>
+
+
+    <div
+        id="groc-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md"
+    >
+
+        <form onsubmit="saveGrocery(event)" class="flex gap-2">
+
+            <input
+                type="text"
+                id="grocery-item"
+                placeholder="Diapers, Formula..."
+                required
+                class="flex-grow bg-slate-950 border border-slate-700 rounded p-3 text-white"
+            >
+
+            <button
+                type="submit"
+                class="bg-amber-500 text-black px-5 rounded font-bold active:scale-95"
+            >
+                Add
+            </button>
+
+        </form>
+
+    </div>
+
+    <div id="grocery-list" class="space-y-2"></div>
+
 </div>
-<div id="grocery-list" class="space-y-2"></div>
-</div>
-​<!-- ================= BILLS ================= -->
+
+
+<!-- ========================================================= -->
+<!-- BILLS -->
+<!-- ========================================================= -->
+
 <div id="view-bills" class="view-section hidden flex-col gap-4 parents-only">
-<button id="toggle-bill-btn" onclick="toggleSection('bill-form-container', 'toggle-bill-btn', 'Add Bill')" class="w-full bg-slate-800 hover:bg-slate-700 text-green-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-green-500/50 flex items-center justify-center gap-2 active:scale-95">
-<i class="fa-solid fa-plus-circle text-lg"></i> <span>Add Bill</span>
-</button>
-​<div id="bill-form-container" class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md">
-<form onsubmit="saveBill(event)" class="space-y-3">
-<input type="text" id="bill-name" placeholder="Pediatrician Copay" required class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white">
-<div class="flex gap-2">
-<div class="w-1/2 relative">
-<span class="absolute left-3 top-3 text-slate-500">$</span>
-<input type="number" step="0.01" id="bill-amt" placeholder="0.00" required class="w-full bg-slate-950 border border-slate-700 rounded p-3 pl-8 text-white">
+
+    <button
+        id="toggle-bill-btn"
+        onclick="toggleSection('bill-form-container','toggle-bill-btn','Add Bill')"
+        class="w-full bg-slate-800 hover:bg-slate-700 text-green-400 py-3 rounded-full font-bold text-base tracking-wider uppercase shadow-md transition-all border border-green-500/50 flex items-center justify-center gap-2 active:scale-95"
+    >
+        <i class="fa-solid fa-plus-circle text-lg"></i>
+        <span>Add Bill</span>
+    </button>
+
+
+    <div
+        id="bill-form-container"
+        class="hidden bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-md"
+    >
+
+        <form onsubmit="saveBill(event)" class="space-y-3">
+
+            <input
+                type="text"
+                id="bill-name"
+                placeholder="Pediatrician Copay"
+                required
+                class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white"
+            >
+
+
+            <div class="flex gap-2">
+
+                <div class="w-1/2 relative">
+
+                    <span class="absolute left-3 top-3 text-slate-500">
+                        $
+                    </span>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        id="bill-amt"
+                        placeholder="0.00"
+                        required
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-3 pl-8 text-white"
+                    >
+
+                </div>
+
+                <input
+                    type="date"
+                    id="bill-due"
+                    required
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white"
+                >
+
+            </div>
+
+
+            <!-- FREQUENCY -->
+
+            <select
+                id="bill-frequency"
+                class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white"
+            >
+                <option value="Monthly">Monthly</option>
+                <option value="Every 2 Months">Every 2 Months</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Yearly">Yearly</option>
+                <option value="One Time">One Time</option>
+            </select>
+
+
+            <button
+                type="submit"
+                class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95"
+            >
+                Save Bill
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div id="bills-list" class="space-y-3"></div>
+
 </div>
-<input type="date" id="bill-due" required class="w-1/2 bg-slate-950 border border-slate-700 rounded p-3 text-white">
+
+</main>
+
+
+<!-- ========================================================= -->
+<!-- SOS MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="sosModal"
+    class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+
+    <div class="bg-slate-900 border-2 border-red-500 p-6 rounded-xl w-full max-w-sm shadow-2xl text-center">
+
+        <i class="fa-solid fa-tower-broadcast text-5xl text-red-500 animate-pulse mb-2"></i>
+
+        <h3 class="font-comic text-3xl text-red-500 tracking-wide">
+            SQUAD ASSIST SOS
+        </h3>
+
+        <p class="text-slate-300 text-sm mt-2 mb-6">
+            Beacon is ready to broadcast to the Ally Squad.
+        </p>
+
+        <div class="space-y-3">
+
+            <button
+                onclick="activateBeacon()"
+                class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg text-lg comic-border"
+            >
+                Activate Beacon
+            </button>
+
+            <button
+                onclick="closeModal('sosModal')"
+                class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-lg"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
-<button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-lg shadow transition active:scale-95">Save Bill</button>
-</form>
+
+
+<!-- ========================================================= -->
+<!-- CLEAR LOGS MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="clearLogsModal"
+    class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+>
+
+    <div class="bg-slate-900 border-2 border-red-500 p-5 rounded-xl w-full max-w-sm text-center">
+
+        <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-3"></i>
+
+        <h3 class="font-comic text-2xl text-white tracking-wide mb-2">
+            CLEAR ALL ACTIVITY?
+        </h3>
+
+        <p class="text-slate-300 text-sm mb-5">
+            This permanently wipes the dashboard timeline.
+        </p>
+
+        <div class="flex gap-3">
+
+            <button
+                onclick="clearLogs()"
+                class="flex-1 bg-red-600 text-white font-bold py-3 rounded-lg"
+            >
+                Yes, Delete
+            </button>
+
+            <button
+                onclick="closeModal('clearLogsModal')"
+                class="flex-1 bg-slate-700 text-white font-bold py-3 rounded-lg"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
-<div id="bills-list" class="space-y-3"></div>
+
+
+<!-- ========================================================= -->
+<!-- DICTATION MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="dictationModal"
+    class="fixed inset-0 bg-black/50 z-[110] hidden flex items-center justify-center pointer-events-none"
+>
+
+    <div class="bg-slate-900/95 border border-amber-500 p-6 rounded-xl flex flex-col items-center gap-3">
+
+        <div class="text-amber-500 text-5xl animate-bounce">
+            <i class="fa-solid fa-microphone"></i>
+        </div>
+
+        <div class="text-white text-lg font-bold">
+            Listening...
+        </div>
+
+    </div>
+
 </div>
-​</main>
-​<!-- SOS MODAL -->
-<div id="sosModal" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-slate-900 border-2 border-red-500 p-6 rounded-xl w-full max-w-sm shadow-2xl text-center">
-<i class="fa-solid fa-tower-broadcast text-5xl text-red-500 animate-pulse mb-2"></i>
-<h3 class="font-comic text-3xl text-red-500 tracking-wide">SQUAD ASSIST SOS</h3>
-<p class="text-slate-300 text-sm mt-2 mb-6">Beacon is ready to broadcast to the Ally Squad.</p>
-<div class="space-y-3">
-<button onclick="closeModal('sosModal')" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg text-lg comic-border">Activate Beacon</button>
-<button onclick="closeModal('sosModal')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-3 rounded-lg">Cancel</button>
-</div>
-</div>
-</div>
-​<!-- CLEAR LOGS MODAL -->
-<div id="clearLogsModal" class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm">
-<div class="bg-slate-900 border-2 border-red-500 p-5 rounded-xl w-full max-w-sm text-center">
-<i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-3"></i>
-<h3 class="font-comic text-2xl text-white tracking-wide mb-2">CLEAR ALL ACTIVITY?</h3>
-<p class="text-slate-300 text-sm mb-5">This permanently wipes the dashboard timeline.</p>
-<div class="flex gap-3">
-<button onclick="clearLogs()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-lg">Yes, Delete</button>
-<button onclick="closeModal('clearLogsModal')" class="flex-1 bg-slate-700 text-white font-bold py-3 rounded-lg">Cancel</button>
-</div>
-</div>
-</div>
-​<!-- DICTATION MODAL -->
-<div id="dictationModal" class="fixed inset-0 bg-black/50 z-[110] hidden flex items-center justify-center pointer-events-none">
-<div class="bg-slate-900/95 border border-amber-500 p-6 rounded-xl flex flex-col items-center gap-3">
-<div class="text-amber-500 text-5xl animate-bounce"><i class="fa-solid fa-microphone"></i></div>
-<div class="text-white text-lg font-bold">Listening...</div>
-</div>
-</div>
-​<script>
+
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================================= -->
+
+<script>
+
 let state = {
-role: 'parents',
-targetTwin: 'Both',
-actionType: 'feed',
-lastFeedAmt: '2.0',
-lastMedAmt: '1.0',
-lastMedUnit: 'ml',
-lastMedType: '',
-logs: [],
-appointments: [],
-growth: [],
-photos: [],
-groceries: [],
-bills: []
+
+    role: 'parents',
+
+    targetTwin: 'Both',
+
+    actionType: 'feed',
+
+    lastFeedAmt: '2.0',
+
+    lastMedAmt: '1.0',
+
+    lastMedUnit: 'ml',
+
+    lastMedType: '',
+
+    logs: [],
+
+    appointments: [],
+
+    growth: [],
+
+    photos: [],
+
+    groceries: [],
+
+    bills: []
+
 };
-​const STORAGE_KEY = 'f4_state_v7';
-​window.onload = () => {
-populateDials();
-loadState();
-setRole(state.role);
-setDashboardTwin(state.targetTwin);
-setDashboardAction(state.actionType);
-applyMemory();
-switchTab('dashboard');
-renderAll();
-};
-​function populateDials() {
-let opts = '';
-for (let i = 0.5; i <= 12.0; i += 0.5) {
-const v = i.toFixed(1);
-opts += <option value="${v}">${v}</option>;
-}
-document.getElementById('feed-amount').innerHTML = opts;
-document.getElementById('med-amount').innerHTML = opts;
-}
-​function loadState() {
-const saved = localStorage.getItem(STORAGE_KEY);
-if (saved) { try { state = { ...state, ...JSON.parse(saved) }; } catch(e){} }
-}
-​function saveData() {
-try {
-localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-} catch(e) {
-if(state.photos.length > 0) { state.photos.pop(); saveData(); }
-}
-renderAll();
-}
-​function applyMemory() {
-document.getElementById('feed-amount').value = state.lastFeedAmt;
-document.getElementById('med-amount').value = state.lastMedAmt;
-document.getElementById('med-unit').value = state.lastMedUnit;
-document.getElementById('med-type').value = state.lastMedType;
-}
-​function switchTab(tabId) {
-if (state.role === 'squad' && tabId === 'bills') return;
-document.querySelectorAll('.view-section').forEach(el => {
-el.classList.add('hidden');
-el.classList.remove('flex');
+
+
+const STORAGE_KEY = 'f4_state_v7';
+
+
+/* ========================================================= */
+/* STARTUP */
+/* ========================================================= */
+
+window.addEventListener('DOMContentLoaded', function() {
+
+    populateDials();
+
+    loadState();
+
+    setRole(state.role, false);
+
+    setDashboardTwin(state.targetTwin, false);
+
+    setDashboardAction(state.actionType, false);
+
+    applyMemory();
+
+    switchTab('dashboard');
+
+    renderAll();
+
 });
-document.querySelectorAll('.tab-btn').forEach(el => {
-el.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
-el.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
+
+
+/* ========================================================= */
+/* POPULATE AMOUNT DIALS */
+/* ========================================================= */
+
+function populateDials() {
+
+    let opts = '';
+
+    for (let i = 0.5; i <= 12.0; i += 0.5) {
+
+        const v = i.toFixed(1);
+
+        opts += `<option value="${v}">${v}</option>`;
+
+    }
+
+    document.getElementById('feed-amount').innerHTML = opts;
+
+    document.getElementById('med-amount').innerHTML = opts;
+
+}
+
+
+/* ========================================================= */
+/* LOAD / SAVE */
+/* ========================================================= */
+
+function loadState() {
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) return;
+
+    try {
+
+        const parsed = JSON.parse(saved);
+
+        state = {
+            ...state,
+            ...parsed
+        };
+
+        if (!Array.isArray(state.logs)) state.logs = [];
+        if (!Array.isArray(state.appointments)) state.appointments = [];
+        if (!Array.isArray(state.growth)) state.growth = [];
+        if (!Array.isArray(state.photos)) state.photos = [];
+        if (!Array.isArray(state.groceries)) state.groceries = [];
+        if (!Array.isArray(state.bills)) state.bills = [];
+
+    } catch (e) {
+
+        console.error('Could not load saved data:', e);
+
+    }
+
+}
+
+
+function saveData() {
+
+    try {
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+    } catch (e) {
+
+        console.warn('Storage limit reached.', e);
+
+        if (state.photos.length > 0) {
+
+            state.photos.pop();
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e2) {
+                console.error('Could not save state.', e2);
+            }
+
+        }
+
+    }
+
+    renderAll();
+
+}
+
+
+/* ========================================================= */
+/* REMEMBER LAST VALUES */
+/* ========================================================= */
+
+function applyMemory() {
+
+    const feed = document.getElementById('feed-amount');
+    const med = document.getElementById('med-amount');
+    const unit = document.getElementById('med-unit');
+    const type = document.getElementById('med-type');
+
+    if (feed) feed.value = state.lastFeedAmt || '2.0';
+
+    if (med) med.value = state.lastMedAmt || '1.0';
+
+    if (unit) unit.value = state.lastMedUnit || 'ml';
+
+    if (type) type.value = state.lastMedType || '';
+
+}
+
+
+/* ========================================================= */
+/* TABS */
+/* ========================================================= */
+
+function switchTab(tabId) {
+
+    if (state.role === 'squad' && tabId === 'bills') {
+
+        return;
+
+    }
+
+    document.querySelectorAll('.view-section').forEach(function(el) {
+
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+
+    });
+
+
+    document.querySelectorAll('.tab-btn').forEach(function(el) {
+
+        el.classList.remove(
+            'bg-blue-600',
+            'text-white',
+            'border-blue-500'
+        );
+
+        el.classList.add(
+            'bg-slate-800',
+            'text-slate-300',
+            'border-slate-700'
+        );
+
+    });
+
+
+    const target = document.getElementById(`view-${tabId}`);
+
+    if (target) {
+
+        target.classList.remove('hidden');
+        target.classList.add('flex');
+
+    }
+
+
+    const btn = document.getElementById(`tab-${tabId}`);
+
+    if (btn) {
+
+        btn.classList.remove(
+            'bg-slate-800',
+            'text-slate-300',
+            'border-slate-700'
+        );
+
+        btn.classList.add(
+            'bg-blue-600',
+            'text-white',
+            'border-blue-500'
+        );
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* ROLE */
+/* ========================================================= */
+
+function setRole(r, shouldSave = true) {
+
+    state.role = r;
+
+    const bP = document.getElementById('role-parents');
+    const bS = document.getElementById('role-squad');
+
+    if (r === 'parents') {
+
+        bP.className =
+            "flex-1 py-2 rounded-full text-sm font-bold transition-all bg-blue-600 text-white z-10 shadow-sm";
+
+        bS.className =
+            "flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10";
+
+        document.querySelectorAll('.parents-only').forEach(function(el) {
+
+            el.classList.remove('hidden');
+
+        });
+
+    } else {
+
+        bS.className =
+            "flex-1 py-2 rounded-full text-sm font-bold transition-all bg-amber-500 text-black z-10 shadow-sm";
+
+        bP.className =
+            "flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10";
+
+        document.querySelectorAll('.parents-only').forEach(function(el) {
+
+            el.classList.add('hidden');
+
+        });
+
+        if (!document.getElementById('view-bills').classList.contains('hidden')) {
+
+            switchTab('dashboard');
+
+        }
+
+    }
+
+    if (shouldSave) saveData();
+
+}
+
+
+/* ========================================================= */
+/* FORM PILL TOGGLES */
+/* ========================================================= */
+
+function toggleSection(conId, btnId, label) {
+
+    const con = document.getElementById(conId);
+
+    const btn = document.getElementById(btnId);
+
+    if (!con || !btn) return;
+
+
+    if (con.classList.contains('hidden')) {
+
+        con.classList.remove('hidden');
+
+        btn.innerHTML =
+            `<i class="fa-solid fa-minus-circle text-lg"></i>
+             <span>Close ${label}</span>`;
+
+        btn.classList.replace(
+            'bg-slate-800',
+            'bg-slate-700'
+        );
+
+
+        if (conId === 'log-form-container') {
+
+            const now = new Date();
+
+            document.getElementById('log-time').value =
+                now.toTimeString().slice(0, 5);
+
+        }
+
+
+        if (conId === 'cal-form-container') {
+
+            const dateInput = document.getElementById('cal-date');
+
+            if (!dateInput.value) {
+
+                dateInput.value =
+                    new Date().toISOString().slice(0, 10);
+
+            }
+
+        }
+
+
+        if (conId === 'grow-form-container') {
+
+            const dateInput = document.getElementById('grow-date');
+
+            if (!dateInput.value) {
+
+                dateInput.value =
+                    new Date().toISOString().slice(0, 10);
+
+            }
+
+        }
+
+
+        if (conId === 'bill-form-container') {
+
+            const dateInput = document.getElementById('bill-due');
+
+            if (!dateInput.value) {
+
+                dateInput.value =
+                    new Date().toISOString().slice(0, 10);
+
+            }
+
+        }
+
+    } else {
+
+        con.classList.add('hidden');
+
+        btn.innerHTML =
+            `<i class="fa-solid fa-plus-circle text-lg"></i>
+             <span>${label}</span>`;
+
+        btn.classList.replace(
+            'bg-slate-700',
+            'bg-slate-800'
+        );
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* DASHBOARD TWIN */
+/* ========================================================= */
+
+function setDashboardTwin(t, shouldSave = true) {
+
+    state.targetTwin = t;
+
+    document.querySelectorAll('.tgt-btn').forEach(function(el) {
+
+        el.className =
+            "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all";
+
+    });
+
+
+    const btn = document.getElementById(`tgt-${t}`);
+
+    if (!btn) return;
+
+
+    if (t === 'Eloise') {
+
+        btn.className =
+            "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all bg-purple-600 text-white shadow-md border-purple-400 scale-[1.02]";
+
+    }
+
+
+    if (t === 'Amelia') {
+
+        btn.className =
+            "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all bg-green-600 text-white shadow-md border-green-400 scale-[1.02]";
+
+    }
+
+
+    if (t === 'Both') {
+
+        btn.className =
+            "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all text-white shadow-md border-white/30 bg-gradient-to-r from-purple-600 to-green-600 scale-[1.02]";
+
+    }
+
+
+    if (shouldSave) saveData();
+
+}
+
+
+/* ========================================================= */
+/* DASHBOARD ACTION */
+/* ========================================================= */
+
+function setDashboardAction(a, shouldSave = true) {
+
+    state.actionType = a;
+
+    document.querySelectorAll('.act-btn').forEach(function(el) {
+
+        el.className =
+            "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all";
+
+    });
+
+
+    const btn = document.getElementById(`act-${a}`);
+
+    if (!btn) return;
+
+
+    if (a === 'feed') {
+
+        btn.className =
+            "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-blue-500 bg-blue-900/30 text-blue-400 scale-[1.03] shadow-md";
+
+    }
+
+
+    if (a === 'diaper') {
+
+        btn.className =
+            "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-amber-500 bg-amber-900/30 text-amber-400 scale-[1.03] shadow-md";
+
+    }
+
+
+    if (a === 'med') {
+
+        btn.className =
+            "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-emerald-500 bg-emerald-900/30 text-emerald-400 scale-[1.03] shadow-md";
+
+    }
+
+
+    document.querySelectorAll('.dynamic-form').forEach(function(el) {
+
+        el.classList.add('hidden');
+
+    });
+
+
+    const form = document.getElementById(`form-${a}`);
+
+    if (form) form.classList.remove('hidden');
+
+
+    if (shouldSave) saveData();
+
+}
+
+
+/* ========================================================= */
+/* DIAPER */
+/* ========================================================= */
+
+function setDiaper(status) {
+
+    document.getElementById('diaper-status').value = status;
+
+    const wBtn = document.getElementById('diaper-wet');
+
+    const dBtn = document.getElementById('diaper-dirty');
+
+
+    wBtn.className =
+        "flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all";
+
+    dBtn.className =
+        "flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all";
+
+
+    if (status === 'Wet') {
+
+        wBtn.className =
+            "flex-1 py-3 rounded-md border-2 border-cyan-500 bg-cyan-900/40 text-cyan-300 font-bold text-base shadow-inner scale-[1.02]";
+
+    }
+
+
+    if (status === 'Dirty') {
+
+        dBtn.className =
+            "flex-1 py-3 rounded-md border-2 border-amber-600 bg-amber-900/40 text-amber-400 font-bold text-base shadow-inner scale-[1.02]";
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* SAVE DASHBOARD LOG */
+/* ========================================================= */
+
+function saveDashboardLog(e) {
+
+    e.preventDefault();
+
+    let details = "";
+
+
+    if (state.actionType === 'feed') {
+
+        const amt =
+            document.getElementById('feed-amount').value;
+
+        details = `${amt} oz`;
+
+        state.lastFeedAmt = amt;
+
+    }
+
+
+    else if (state.actionType === 'diaper') {
+
+        const stat =
+            document.getElementById('diaper-status').value;
+
+        if (!stat) {
+
+            alert('Please select Wet or Dirty.');
+
+            return;
+
+        }
+
+        details = stat;
+
+    }
+
+
+    else if (state.actionType === 'med') {
+
+        const amt =
+            document.getElementById('med-amount').value;
+
+        const unit =
+            document.getElementById('med-unit').value;
+
+        const type =
+            document.getElementById('med-type').value.trim();
+
+        if (!type) {
+
+            alert('Please enter the medication name.');
+
+            return;
+
+        }
+
+        details = `${amt} ${unit} - ${type}`;
+
+        state.lastMedAmt = amt;
+        state.lastMedUnit = unit;
+        state.lastMedType = type;
+
+    }
+
+
+    const rawTime =
+        document.getElementById('log-time').value;
+
+    let timeFmt = rawTime;
+
+
+    if (rawTime) {
+
+        let [h, m] = rawTime.split(':');
+
+        let hd = parseInt(h, 10);
+
+        const ampm = hd >= 12 ? 'PM' : 'AM';
+
+        hd = hd % 12 || 12;
+
+        timeFmt = `${hd}:${m} ${ampm}`;
+
+    }
+
+
+    state.logs.unshift({
+
+        id: Date.now(),
+
+        twin: state.targetTwin,
+
+        action: state.actionType,
+
+        details: details,
+
+        time: timeFmt,
+
+        notes:
+            document.getElementById('log-notes').value.trim()
+
+    });
+
+
+    document.getElementById('log-notes').value = "";
+
+    setDiaper('');
+
+    document.getElementById('diaper-status').value = "";
+
+
+    closeForm('log-form-container', 'toggle-log-btn', 'Log Action');
+
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* CLOSE FORM HELPER */
+/* ========================================================= */
+
+function closeForm(conId, btnId, label) {
+
+    const con = document.getElementById(conId);
+
+    const btn = document.getElementById(btnId);
+
+    if (!con || !btn) return;
+
+    con.classList.add('hidden');
+
+    btn.innerHTML =
+        `<i class="fa-solid fa-plus-circle text-lg"></i>
+         <span>${label}</span>`;
+
+    btn.classList.remove('bg-slate-700');
+    btn.classList.add('bg-slate-800');
+
+}
+
+
+/* ========================================================= */
+/* CLEAR LOGS */
+/* ========================================================= */
+
+function clearLogs() {
+
+    state.logs = [];
+
+    saveData();
+
+    closeModal('clearLogsModal');
+
+}
+
+
+/* ========================================================= */
+/* DICTATION */
+/* ========================================================= */
+
+function startDictation(inputId) {
+
+    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+
+        const SR =
+            window.SpeechRecognition ||
+            window.webkitSpeechRecognition;
+
+        const rec = new SR();
+
+        rec.continuous = false;
+
+        rec.interimResults = false;
+
+        rec.lang = 'en-US';
+
+
+        rec.onstart = function() {
+
+            openModal('dictationModal');
+
+        };
+
+
+        rec.onresult = function(e) {
+
+            const txt =
+                e.results[0][0].transcript;
+
+            const inp =
+                document.getElementById(inputId);
+
+            inp.value =
+                inp.value
+                    ? inp.value + " " + txt
+                    : txt;
+
+        };
+
+
+        rec.onend = function() {
+
+            closeModal('dictationModal');
+
+        };
+
+
+        rec.onerror = function() {
+
+            closeModal('dictationModal');
+
+        };
+
+
+        try {
+
+            rec.start();
+
+        } catch (err) {
+
+            closeModal('dictationModal');
+
+        }
+
+    } else {
+
+        alert('Voice-to-text is not supported by this browser.');
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* APPOINTMENTS */
+/* ========================================================= */
+
+function saveAppointment(e) {
+
+    e.preventDefault();
+
+
+    state.appointments.push({
+
+        id: Date.now(),
+
+        date:
+            document.getElementById('cal-date').value,
+
+        time:
+            document.getElementById('cal-time').value,
+
+        twin:
+            document.getElementById('cal-twin').value,
+
+        desc:
+            document.getElementById('cal-desc').value.trim()
+
+    });
+
+
+    document.getElementById('cal-desc').value = "";
+
+
+    closeForm(
+        'cal-form-container',
+        'toggle-cal-btn',
+        'Schedule Appointment'
+    );
+
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* GROWTH */
+/* ========================================================= */
+
+function saveGrowth(e) {
+
+    e.preventDefault();
+
+
+    state.growth.push({
+
+        id: Date.now(),
+
+        date:
+            document.getElementById('grow-date').value,
+
+        twin:
+            document.getElementById('grow-twin').value,
+
+        w:
+            document.getElementById('grow-weight').value,
+
+        h:
+            document.getElementById('grow-height').value
+
+    });
+
+
+    document.getElementById('grow-weight').value = "";
+
+    document.getElementById('grow-height').value = "";
+
+
+    closeForm(
+        'grow-form-container',
+        'toggle-grow-btn',
+        'Log Growth Metric'
+    );
+
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* PHOTOS */
+/* ========================================================= */
+
+function handlePhotoUpload(e) {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+
+    if (!file.type.startsWith('image/')) {
+
+        alert('Please choose an image.');
+
+        return;
+
+    }
+
+
+    const reader = new FileReader();
+
+
+    reader.onload = function(ev) {
+
+        state.photos.unshift(ev.target.result);
+
+        saveData();
+
+        closeForm(
+            'photo-form-container',
+            'toggle-photo-btn',
+            'Upload Photo Memory'
+        );
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function removePhoto(idx) {
+
+    if (!confirm('Delete this photo memory?')) return;
+
+    state.photos.splice(idx, 1);
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* GROCERY */
+/* ========================================================= */
+
+function saveGrocery(e) {
+
+    e.preventDefault();
+
+
+    const inp =
+        document.getElementById('grocery-item');
+
+
+    const name =
+        inp.value.trim();
+
+
+    if (!name) return;
+
+
+    state.groceries.push({
+
+        id: Date.now(),
+
+        name: name,
+
+        done: false
+
+    });
+
+
+    inp.value = "";
+
+
+    closeForm(
+        'groc-form-container',
+        'toggle-groc-btn',
+        'Add Grocery Item'
+    );
+
+
+    saveData();
+
+}
+
+
+function toggleGrocery(id) {
+
+    const item =
+        state.groceries.find(g => g.id === id);
+
+    if (item) {
+
+        item.done = !item.done;
+
+    }
+
+    saveData();
+
+}
+
+
+function removeGrocery(id) {
+
+    state.groceries =
+        state.groceries.filter(g => g.id !== id);
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* BILLS */
+/* ========================================================= */
+
+function saveBill(e) {
+
+    e.preventDefault();
+
+
+    const amt =
+        parseFloat(
+            document.getElementById('bill-amt').value
+        );
+
+
+    if (isNaN(amt)) {
+
+        alert('Please enter a valid amount.');
+
+        return;
+
+    }
+
+
+    state.bills.push({
+
+        id: Date.now(),
+
+        name:
+            document.getElementById('bill-name').value.trim(),
+
+        amt:
+            amt.toFixed(2),
+
+        due:
+            document.getElementById('bill-due').value,
+
+        frequency:
+            document.getElementById('bill-frequency').value
+
+    });
+
+
+    document.getElementById('bill-name').value = "";
+
+    document.getElementById('bill-amt').value = "";
+
+
+    closeForm(
+        'bill-form-container',
+        'toggle-bill-btn',
+        'Add Bill'
+    );
+
+
+    saveData();
+
+}
+
+
+function removeBill(id) {
+
+    state.bills =
+        state.bills.filter(b => b.id !== id);
+
+    saveData();
+
+}
+
+
+/* ========================================================= */
+/* RENDER ALL */
+/* ========================================================= */
+
+function renderAll() {
+
+    renderLogs();
+
+    renderCalendar();
+
+    renderGrowth();
+
+    renderPhotos();
+
+    renderGrocery();
+
+    renderBills();
+
+}
+
+
+/* ========================================================= */
+/* RENDER LOGS */
+/* ========================================================= */
+
+function renderLogs() {
+
+    const c =
+        document.getElementById('logs-container');
+
+
+    if (state.logs.length === 0) {
+
+        c.innerHTML =
+            '<div class="text-center text-slate-500 py-6 italic border-2 border-dashed border-slate-800 rounded-lg">No activity recorded today.</div>';
+
+        return;
+
+    }
+
+
+    c.innerHTML =
+        state.logs.map(function(l) {
+
+            let bc =
+                l.twin === 'Eloise'
+                    ? "border-l-purple-500"
+                    : l.twin === 'Amelia'
+                        ? "border-l-green-500"
+                        : "border-l-transparent border-gradient-both";
+
+
+            let nc =
+                l.twin === 'Eloise'
+                    ? "text-purple-400"
+                    : l.twin === 'Amelia'
+                        ? "text-green-400"
+                        : "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-green-400";
+
+
+            let icon =
+                l.action === 'feed'
+                    ? '<i class="fa-solid fa-bottle-droplet text-blue-400 text-xl"></i>'
+                    : l.action === 'diaper'
+                        ? '<i class="fa-solid fa-baby-carriage text-amber-400 text-xl"></i>'
+                        : '<i class="fa-solid fa-pills text-emerald-400 text-xl"></i>';
+
+
+            return `
+                <div class="bg-slate-950 p-3 rounded-r-lg border-t border-r border-b border-slate-800 shadow-sm flex flex-col border-l-4 ${bc}">
+
+                    <div class="flex justify-between items-center">
+
+                        <div>
+
+                            <div class="font-bold text-lg ${nc}">
+                                ${escapeHTML(l.twin)}
+                            </div>
+
+                            <div class="text-white text-base mt-0.5">
+                                ${escapeHTML(l.details)}
+                            </div>
+
+                        </div>
+
+                        <div class="flex flex-col items-end gap-1">
+
+                            <span class="text-xs text-slate-400 font-bold">
+                                ${escapeHTML(l.time)}
+                            </span>
+
+                            ${icon}
+
+                        </div>
+
+                    </div>
+
+                    ${
+                        l.notes
+                            ? `
+                                <div class="text-sm text-slate-400 mt-3 italic bg-slate-900 p-2 rounded-md border border-slate-800">
+                                    <i class="fa-solid fa-quote-left text-slate-600 mr-2"></i>
+                                    ${escapeHTML(l.notes)}
+                                </div>
+                              `
+                            : ''
+                    }
+
+                </div>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* RENDER CALENDAR */
+/* ========================================================= */
+
+function renderCalendar() {
+
+    const c =
+        document.getElementById('calendar-list');
+
+
+    const sorted =
+        [...state.appointments].sort(function(a, b) {
+
+            return new Date(a.date + 'T' + a.time) -
+                   new Date(b.date + 'T' + b.time);
+
+        });
+
+
+    if (sorted.length === 0) {
+
+        c.innerHTML =
+            '<div class="text-center text-slate-500 py-6 italic">No upcoming appointments.</div>';
+
+        return;
+
+    }
+
+
+    c.innerHTML =
+        sorted.map(function(a) {
+
+            const twinClass =
+                a.twin === 'Eloise'
+                    ? 'bg-purple-900/50 text-purple-400'
+                    : a.twin === 'Amelia'
+                        ? 'bg-green-900/50 text-green-400'
+                        : 'bg-slate-800 text-slate-300';
+
+
+            return `
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex justify-between items-center gap-3">
+
+                    <div class="min-w-0">
+
+                        <div class="font-bold text-white text-lg break-words">
+                            ${escapeHTML(a.desc)}
+                        </div>
+
+                        <div class="text-sm text-slate-400">
+                            ${escapeHTML(a.date)} @ ${escapeHTML(a.time)}
+                        </div>
+
+                    </div>
+
+                    <span class="px-2 py-1 text-xs rounded font-bold whitespace-nowrap ${twinClass}">
+                        ${escapeHTML(a.twin)}
+                    </span>
+
+                </div>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* RENDER GROWTH */
+/* ========================================================= */
+
+function renderGrowth() {
+
+    const tbody =
+        document.getElementById('growth-list');
+
+
+    const sorted =
+        [...state.growth].sort(function(a, b) {
+
+            return new Date(b.date) - new Date(a.date);
+
+        });
+
+
+    if (sorted.length === 0) {
+
+        tbody.innerHTML =
+            '<tr><td colspan="4" class="text-center text-slate-500 py-6 italic">No growth measurements recorded yet.</td></tr>';
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        sorted.map(function(g) {
+
+            const twinClass =
+                g.twin === 'Eloise'
+                    ? 'text-purple-400'
+                    : 'text-green-400';
+
+
+            return `
+                <tr class="text-white">
+
+                    <td class="py-3 text-slate-400">
+                        ${escapeHTML(g.date)}
+                    </td>
+
+                    <td class="py-3 font-bold ${twinClass}">
+                        ${escapeHTML(g.twin)}
+                    </td>
+
+                    <td class="py-3">
+                        ${escapeHTML(g.w)} lb
+                    </td>
+
+                    <td class="py-3">
+                        ${escapeHTML(g.h)} in
+                    </td>
+
+                </tr>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* RENDER PHOTOS */
+/* ========================================================= */
+
+function renderPhotos() {
+
+    const c =
+        document.getElementById('photo-gallery');
+
+
+    if (state.photos.length === 0) {
+
+        c.innerHTML =
+            '<div class="col-span-2 text-center text-slate-500 py-10">No memories uploaded yet.</div>';
+
+        return;
+
+    }
+
+
+    c.innerHTML =
+        state.photos.map(function(p, i) {
+
+            return `
+                <div class="relative aspect-square rounded-xl overflow-hidden border-2 border-slate-700 bg-black group">
+
+                    <img
+                        src="${p}"
+                        class="object-cover w-full h-full"
+                        alt="Photo memory"
+                    >
+
+                    <button
+                        onclick="removePhoto(${i})"
+                        class="absolute top-2 right-2 bg-red-600 w-8 h-8 rounded-full text-white shadow opacity-80 hover:opacity-100"
+                    >
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+
+                </div>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* RENDER GROCERY */
+/* ========================================================= */
+
+function renderGrocery() {
+
+    const c =
+        document.getElementById('grocery-list');
+
+
+    if (state.groceries.length === 0) {
+
+        c.innerHTML =
+            '<div class="text-center text-slate-500 py-6 italic">Grocery list is empty.</div>';
+
+        return;
+
+    }
+
+
+    c.innerHTML =
+        state.groceries.map(function(g) {
+
+            return `
+                <div class="flex items-center bg-slate-950 border border-slate-800 p-3 rounded-lg gap-3">
+
+                    <button
+                        onclick="toggleGrocery(${g.id})"
+                        class="w-6 h-6 rounded border-2 ${g.done ? 'bg-amber-500 border-amber-500 text-black' : 'border-slate-500 text-transparent'} flex items-center justify-center transition"
+                    >
+                        <i class="fa-solid fa-check text-xs"></i>
+                    </button>
+
+                    <span
+                        class="flex-grow text-lg ${g.done ? 'line-through text-slate-600' : 'text-white'} transition-all"
+                    >
+                        ${escapeHTML(g.name)}
+                    </span>
+
+                    <button
+                        onclick="removeGrocery(${g.id})"
+                        class="text-red-500/50 hover:text-red-500"
+                    >
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                </div>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* RENDER BILLS */
+/* ========================================================= */
+
+function renderBills() {
+
+    const c =
+        document.getElementById('bills-list');
+
+
+    const sorted =
+        [...state.bills].sort(function(a, b) {
+
+            return new Date(a.due) - new Date(b.due);
+
+        });
+
+
+    if (sorted.length === 0) {
+
+        c.innerHTML =
+            '<div class="text-center text-slate-500 py-6 italic">No pending bills.</div>';
+
+        return;
+
+    }
+
+
+    c.innerHTML =
+        sorted.map(function(b) {
+
+            const frequency =
+                b.frequency || 'One Time';
+
+
+            return `
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex justify-between items-center gap-3">
+
+                    <div class="min-w-0">
+
+                        <div class="font-bold text-white text-lg break-words">
+                            ${escapeHTML(b.name)}
+                        </div>
+
+                        <div class="text-sm text-red-400">
+                            Due: ${escapeHTML(b.due)}
+                        </div>
+
+                        <div class="text-xs text-slate-500 mt-1">
+                            <i class="fa-solid fa-rotate mr-1"></i>
+                            ${escapeHTML(frequency)}
+                        </div>
+
+                    </div>
+
+                    <div class="flex items-center gap-3">
+
+                        <span class="text-xl font-bold text-amber-500 whitespace-nowrap">
+                            $${escapeHTML(b.amt)}
+                        </span>
+
+                        <button
+                            onclick="removeBill(${b.id})"
+                            class="text-red-500/50 hover:text-red-500"
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join('');
+
+}
+
+
+/* ========================================================= */
+/* HTML ESCAPE */
+/* ========================================================= */
+
+function escapeHTML(value) {
+
+    if (value === undefined || value === null) return '';
+
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+}
+
+
+/* ========================================================= */
+/* MODALS */
+/* ========================================================= */
+
+function openModal(id) {
+
+    const modal =
+        document.getElementById(id);
+
+    if (modal) {
+
+        modal.classList.remove('hidden');
+
+    }
+
+}
+
+
+function closeModal(id) {
+
+    const modal =
+        document.getElementById(id);
+
+    if (modal) {
+
+        modal.classList.add('hidden');
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* SOS */
+/* ========================================================= */
+
+function activateBeacon() {
+
+    closeModal('sosModal');
+
+    alert('🚨 SOS BEACON ACTIVATED — Ally Squad has been alerted.');
+
+}
+
+
+/* ========================================================= */
+/* CLOSE MODALS WHEN CLICKING BACKDROP */
+/* ========================================================= */
+
+document.addEventListener('click', function(e) {
+
+    if (e.target.id === 'sosModal') {
+
+        closeModal('sosModal');
+
+    }
+
+    if (e.target.id === 'clearLogsModal') {
+
+        closeModal('clearLogsModal');
+
+    }
+
 });
-const target = document.getElementById(view-${tabId});
-if (target) { target.classList.remove('hidden'); target.classList.add('flex'); }
-const btn = document.getElementById(tab-${tabId});
-if (btn) {
-btn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
-btn.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
-}
-}
-​function setRole(r) {
-state.role = r;
-const bP = document.getElementById('role-parents');
-const bS = document.getElementById('role-squad');
-if (r === 'parents') {
-bP.className = "flex-1 py-2 rounded-full text-sm font-bold transition-all bg-blue-600 text-white z-10 shadow-sm";
-bS.className = "flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10";
-document.querySelectorAll('.parents-only').forEach(el => el.classList.remove('hidden'));
-} else {
-bS.className = "flex-1 py-2 rounded-full text-sm font-bold transition-all bg-amber-500 text-black z-10 shadow-sm";
-bP.className = "flex-1 py-2 rounded-full text-sm font-bold transition-all text-slate-400 z-10";
-document.querySelectorAll('.parents-only').forEach(el => el.classList.add('hidden'));
-if (!document.getElementById('view-bills').classList.contains('hidden')) switchTab('dashboard');
-}
-saveData();
-}
-​function toggleSection(conId, btnId, label) {
-const con = document.getElementById(conId);
-const btn = document.getElementById(btnId);
-if (con.classList.contains('hidden')) {
-con.classList.remove('hidden');
-btn.innerHTML = <i class="fa-solid fa-minus-circle text-lg"></i> <span>Close ${label}</span>;
-btn.classList.replace('bg-slate-800', 'bg-slate-700');
-if(conId === 'log-form-container') {
-const now = new Date();
-document.getElementById('log-time').value = now.toTimeString().slice(0, 5);
-}
-} else {
-con.classList.add('hidden');
-btn.innerHTML = <i class="fa-solid fa-plus-circle text-lg"></i> <span>${label}</span>;
-btn.classList.replace('bg-slate-700', 'bg-slate-800');
-}
-}
-​function setDashboardTwin(t) {
-state.targetTwin = t;
-document.querySelectorAll('.tgt-btn').forEach(el => el.className = "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all");
-const btn = document.getElementById(tgt-${t});
-if (t === 'Eloise') btn.className = "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all bg-purple-600 text-white shadow-md border-purple-400 scale-[1.02]";
-if (t === 'Amelia') btn.className = "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all bg-green-600 text-white shadow-md border-green-400 scale-[1.02]";
-if (t === 'Both') btn.className = "tgt-btn flex-1 py-2.5 rounded-full text-sm font-bold transition-all text-white shadow-md border-white/30 bg-gradient-to-r from-purple-600 to-green-600 scale-[1.02]";
-}
-​function setDashboardAction(a) {
-state.actionType = a;
-document.querySelectorAll('.act-btn').forEach(el => el.className = "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-400 transition-all");
-const btn = document.getElementById(act-${a});
-if(a === 'feed') btn.className = "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-blue-500 bg-blue-900/30 text-blue-400 scale-[1.03] shadow-md";
-if(a === 'diaper') btn.className = "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-amber-500 bg-amber-900/30 text-amber-400 scale-[1.03] shadow-md";
-if(a === 'med') btn.className = "act-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-emerald-500 bg-emerald-900/30 text-emerald-400 scale-[1.03] shadow-md";
-​document.querySelectorAll('.dynamic-form').forEach(el => el.classList.add('hidden'));
-document.getElementById(form-${a}).classList.remove('hidden');
-}
-​function setDiaper(status) {
-document.getElementById('diaper-status').value = status;
-const wBtn = document.getElementById('diaper-wet');
-const dBtn = document.getElementById('diaper-dirty');
-wBtn.className = "flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all";
-dBtn.className = "flex-1 py-3 rounded-md border-2 border-slate-700 bg-slate-900 text-slate-400 font-bold text-base transition-all";
-if(status === 'Wet') wBtn.className = "flex-1 py-3 rounded-md border-2 border-cyan-500 bg-cyan-900/40 text-cyan-300 font-bold text-base shadow-inner scale-[1.02]";
-if(status === 'Dirty') dBtn.className = "flex-1 py-3 rounded-md border-2 border-amber-600 bg-amber-900/40 text-amber-400 font-bold text-base shadow-inner scale-[1.02]";
-}
-​function saveDashboardLog(e) {
-e.preventDefault();
-let details = "";
-if (state.actionType === 'feed') {
-const amt = document.getElementById('feed-amount').value;
-details = ${amt} oz;
-state.lastFeedAmt = amt;
-} else if (state.actionType === 'diaper') {
-const stat = document.getElementById('diaper-status').value;
-if(!stat) return;
-details = stat;
-} else if (state.actionType === 'med') {
-const amt = document.getElementById('med-amount').value;
-const unit = document.getElementById('med-unit').value;
-const type = document.getElementById('med-type').value.trim();
-if(!type) return;
-details = ${amt} ${unit} - ${type};
-state.lastMedAmt = amt;
-state.lastMedUnit = unit;
-state.lastMedType = type;
-}
-​const rawTime = document.getElementById('log-time').value;
-let timeFmt = rawTime;
-if(rawTime) {
-let [h, m] = rawTime.split(':');
-let hd = parseInt(h);
-let ampm = hd >= 12 ? 'PM' : 'AM';
-hd = hd % 12 || 12;
-timeFmt = ${hd}:${m} ${ampm};
-}
-​state.logs.unshift({
-id: Date.now(),
-twin: state.targetTwin,
-action: state.actionType,
-details: details,
-time: timeFmt,
-notes: document.getElementById('log-notes').value
+
+
+/* ========================================================= */
+/* ESC KEY */
+/* ========================================================= */
+
+document.addEventListener('keydown', function(e) {
+
+    if (e.key === 'Escape') {
+
+        closeModal('sosModal');
+
+        closeModal('clearLogsModal');
+
+        closeModal('dictationModal');
+
+    }
+
 });
-​document.getElementById('log-notes').value = "";
-setDiaper('');
-document.getElementById('diaper-status').value = "";
-toggleSection('log-form-container', 'toggle-log-btn', 'Log Action');
-saveData();
-}
-​function clearLogs() {
-state.logs = [];
-saveData();
-closeModal('clearLogsModal');
-}
-​function startDictation(inputId) {
-if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const rec = new SR();
-rec.continuous = false;
-rec.onstart = () => openModal('dictationModal');
-rec.onresult = (e) => {
-const txt = e.results[0][0].transcript;
-const inp = document.getElementById(inputId);
-inp.value = inp.value ? inp.value + " " + txt : txt;
-};
-rec.onend = () => closeModal('dictationModal');
-rec.onerror = () => closeModal('dictationModal');
-rec.start();
-}
-}
-​function saveAppointment(e) {
-e.preventDefault();
-state.appointments.push({
-id: Date.now(),
-date: document.getElementById('cal-date').value,
-time: document.getElementById('cal-time').value,
-twin: document.getElementById('cal-twin').value,
-desc: document.getElementById('cal-desc').value
-});
-document.getElementById('cal-desc').value = "";
-toggleSection('cal-form-container', 'toggle-cal-btn', 'Schedule Appointment');
-saveData();
-}
-​function saveGrowth(e) {
-e.preventDefault();
-state.growth.push({
-id: Date.now(),
-date: document.getElementById('grow-date').value,
-twin: document.getElementById('grow-twin').value,
-w: document.getElementById('grow-weight').value,
-h: document.getElementById('grow-height').value
-});
-document.getElementById('grow-weight').value = "";
-document.getElementById('grow-height').value = "";
-toggleSection('grow-form-container', 'toggle-grow-btn', 'Log Growth Metric');
-saveData();
-}
-​function handlePhotoUpload(e) {
-const file = e.target.files[0];
-if (!file) return;
-const reader = new FileReader();
-reader.onload = (ev) => {
-state.photos.unshift(ev.target.result);
-saveData();
-};
-reader.readAsDataURL(file);
-}
-​function removePhoto(idx) {
-state.photos.splice(idx, 1);
-saveData();
-}
-​function saveGrocery(e) {
-e.preventDefault();
-const inp = document.getElementById('grocery-item');
-state.groceries.push({ id: Date.now(), name: inp.value, done: false });
-inp.value = "";
-toggleSection('groc-form-container', 'toggle-groc-btn', 'Add Grocery Item');
-saveData();
-}
-​function toggleGrocery(id) {
-const item = state.groceries.find(g => g.id === id);
-if(item) item.done = !item.done;
-saveData();
-}
-​function removeGrocery(id) {
-state.groceries = state.groceries.filter(g => g.id !== id);
-saveData();
-}
-​function saveBill(e) {
-e.preventDefault();
-const amt = parseFloat(document.getElementById('bill-amt').value).toFixed(2);
-state.bills.push({
-id: Date.now(),
-name: document.getElementById('bill-name').value,
-amt: amt,
-due: document.getElementById('bill-due').value
-});
-document.getElementById('bill-name').value = "";
-document.getElementById('bill-amt').value = "";
-toggleSection('bill-form-container', 'toggle-bill-btn', 'Add Bill');
-saveData();
-}
-​function removeBill(id) {
-state.bills = state.bills.filter(b => b.id !== id);
-saveData();
-}
-​function renderAll() {
-renderLogs();
-renderCalendar();
-renderGrowth();
-renderPhotos();
-renderGrocery();
-renderBills();
-}
-​function renderLogs() {
-const c = document.getElementById('logs-container');
-if (state.logs.length === 0) {
-c.innerHTML = '<div class="text-center text-slate-500 py-6 italic border-2 border-dashed border-slate-800 rounded-lg">No activity recorded today.</div>';
-return;
-}
-c.innerHTML = state.logs.map(l => {
-let bc = l.twin === 'Eloise' ? "border-l-purple-500" : l.twin === 'Amelia' ? "border-l-green-500" : "border-l-transparent border-gradient-both";
-let nc = l.twin === 'Eloise' ? "text-purple-400" : l.twin === 'Amelia' ? "text-green-400" : "text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-green-400";
-let icon = l.action === 'feed' ? '<i class="fa-solid fa-bottle-droplet text-blue-400 text-xl"></i>' :
-l.action === 'diaper' ? '<i class="fa-solid fa-baby-carriage text-amber-400 text-xl"></i>' :
-'<i class="fa-solid fa-pills text-emerald-400 text-xl"></i>';
-​return <div class="bg-slate-950 p-3 rounded-r-lg border-t border-r border-b border-slate-800 shadow-sm flex flex-col border-l-4 ${bc}"> <div class="flex justify-between items-center"> <div> <div class="font-bold text-lg ${nc}">${l.twin}</div> <div class="text-white text-base mt-0.5">${l.details}</div> </div> <div class="flex flex-col items-end gap-1"> <span class="text-xs text-slate-400 font-bold">${l.time}</span> ${icon} </div> </div> ${l.notes ?<div class="text-sm text-slate-400 mt-3 italic bg-slate-900 p-2 rounded-md border border-slate-800"><i class="fa-solid fa-quote-left text-slate-600 mr-2"></i>${l.notes}</div> : ''} </div>;
-}).join('');
-}
-​function renderCalendar() {
-const c = document.getElementById('calendar-list');
-let sorted = [...state.appointments].sort((a,b) => new Date(a.date) - new Date(b.date));
-if(sorted.length === 0) { c.innerHTML = '<div class="text-center text-slate-500 py-6 italic">No upcoming appointments.</div>'; return; }
-c.innerHTML = sorted.map(a => <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex justify-between items-center"> <div> <div class="font-bold text-white text-lg">${a.desc}</div> <div class="text-sm text-slate-400">${a.date} @ ${a.time}</div> </div> <span class="px-2 py-1 text-xs rounded font-bold ${a.twin==='Eloise'?'bg-purple-900/50 text-purple-400':a.twin==='Amelia'?'bg-green-900/50 text-green-400':'bg-slate-800 text-slate-300'}">${a.twin}</span> </div>).join('');
-}
-​function renderGrowth() {
-const tbody = document.getElementById('growth-list');
-let sorted = [...state.growth].sort((a,b) => new Date(b.date) - new Date(a.date));
-tbody.innerHTML = sorted.map(g => <tr class="text-white"> <td class="py-3 text-slate-400">${g.date}</td> <td class="py-3 font-bold ${g.twin==='Eloise'?'text-purple-400':'text-green-400'}">${g.twin}</td> <td class="py-3">${g.w} lb</td> <td class="py-3">${g.h} in</td> </tr>).join('');
-}
-​function renderPhotos() {
-const c = document.getElementById('photo-gallery');
-if(state.photos.length === 0) { c.innerHTML = '<div class="col-span-2 text-center text-slate-500 py-10">No memories uploaded yet.</div>'; return; }
-c.innerHTML = state.photos.map((p, i) => <div class="relative aspect-square rounded-xl overflow-hidden border-2 border-slate-700 bg-black group"> <img src="${p}" class="object-cover w-full h-full"> <button onclick="removePhoto(${i})" class="absolute top-2 right-2 bg-red-600 w-8 h-8 rounded-full text-white shadow opacity-80 hover:opacity-100"><i class="fa-solid fa-times"></i></button> </div>).join('');
-}
-​function renderGrocery() {
-const c = document.getElementById('grocery-list');
-if(state.groceries.length === 0) { c.innerHTML = '<div class="text-center text-slate-500 py-6 italic">Grocery list is empty.</div>'; return; }
-c.innerHTML = state.groceries.map(g => <div class="flex items-center bg-slate-950 border border-slate-800 p-3 rounded-lg gap-3"> <button onclick="toggleGrocery(${g.id})" class="w-6 h-6 rounded border-2 ${g.done ? 'bg-amber-500 border-amber-500 text-black' : 'border-slate-500 text-transparent'} flex items-center justify-center transition"> <i class="fa-solid fa-check text-xs"></i> </button> <span class="flex-grow text-lg ${g.done ? 'line-through text-slate-600' : 'text-white'} transition-all">${g.name}</span> <button onclick="removeGrocery(${g.id})" class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash"></i></button> </div>).join('');
-}
-​function renderBills() {
-const c = document.getElementById('bills-list');
-let sorted = [...state.bills].sort((a,b) => new Date(a.due) - new Date(b.due));
-if(sorted.length === 0) { c.innerHTML = '<div class="text-center text-slate-500 py-6 italic">No pending bills.</div>'; return; }
-c.innerHTML = sorted.map(b => <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex justify-between items-center"> <div> <div class="font-bold text-white text-lg">${b.name}</div> <div class="text-sm text-red-400">Due: ${b.due}</div> </div> <div class="flex items-center gap-4"> <span class="text-xl font-bold text-amber-500">$${b.amt}</span> <button onclick="removeBill(${b.id})" class="text-red-500/50 hover:text-red-500"><i class="fa-solid fa-trash"></i></button> </div> </div>).join('');
-}
-​function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
 </script>
+
 </body>
 </html>
