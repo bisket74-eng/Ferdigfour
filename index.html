@@ -133,7 +133,7 @@ button {
                     class="flex-1 py-2 rounded-full text-sm font-bold transition-all bg-blue-600 text-white z-10 shadow-sm"
                 >
                     <i class="fa-solid fa-user-shield mr-1"></i>
-                    Parents (Ben & Megan)
+                    Parents
                 </button>
 
                 <button
@@ -711,6 +711,20 @@ button {
     </div>
 
 
+    <div class="flex justify-end">
+
+        <button
+            id="photo-edit-btn"
+            onclick="togglePhotoEditMode()"
+            class="parents-only bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-full text-sm font-bold border border-slate-700 transition active:scale-95 flex items-center gap-2"
+        >
+            <i class="fa-solid fa-pen"></i>
+            <span>Edit</span>
+        </button>
+
+    </div>
+
+
     <div id="photo-gallery" class="grid grid-cols-2 gap-3"></div>
 
 </div>
@@ -864,10 +878,10 @@ button {
 
 <div
     id="sosModal"
-    class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm"
+    class="fixed inset-0 bg-black/90 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto"
 >
 
-    <div class="bg-slate-900 border-2 border-red-500 p-6 rounded-xl w-full max-w-sm shadow-2xl text-center">
+    <div class="bg-slate-900 border-2 border-red-500 p-6 rounded-xl w-full max-w-sm shadow-2xl text-center my-auto">
 
         <i class="fa-solid fa-tower-broadcast text-5xl text-red-500 animate-pulse mb-2"></i>
 
@@ -875,9 +889,139 @@ button {
             SQUAD ASSIST SOS
         </h3>
 
-        <p class="text-slate-300 text-sm mt-2 mb-6">
-            Beacon is ready to broadcast to the Ally Squad.
+        <p class="text-slate-300 text-sm mt-2 mb-4">
+            What kind of help do you need?
         </p>
+
+        <!-- SOS TYPE OPTIONS -->
+
+        <div id="sos-type-grid" class="grid grid-cols-2 gap-2 mb-4">
+
+            <button
+                type="button"
+                onclick="setSosType('babysitter')"
+                id="sos-type-babysitter"
+                class="sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all"
+            >
+                <i class="fa-solid fa-baby-carriage text-xl mb-1"></i>
+                <span class="text-xs font-bold">Babysitter</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="setSosType('help')"
+                id="sos-type-help"
+                class="sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all"
+            >
+                <i class="fa-solid fa-hands-helping text-xl mb-1"></i>
+                <span class="text-xs font-bold">Come Help</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="setSosType('ride')"
+                id="sos-type-ride"
+                class="sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all"
+            >
+                <i class="fa-solid fa-car text-xl mb-1"></i>
+                <span class="text-xs font-bold">Need a Ride</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="setSosType('doctor')"
+                id="sos-type-doctor"
+                class="sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all"
+            >
+                <i class="fa-solid fa-briefcase-medical text-xl mb-1"></i>
+                <span class="text-xs font-bold">Doctor Visit</span>
+            </button>
+
+            <button
+                type="button"
+                onclick="setSosType('other')"
+                id="sos-type-other"
+                class="sos-type-btn col-span-2 flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all"
+            >
+                <i class="fa-solid fa-circle-question text-xl mb-1"></i>
+                <span class="text-xs font-bold">Something Else</span>
+            </button>
+
+        </div>
+
+        <input type="hidden" id="sos-type" value="">
+
+        <!-- TIMING -->
+
+        <div id="sos-timing-section" class="hidden mb-4">
+
+            <div class="flex gap-1.5 bg-slate-950 p-1.5 rounded-full border border-slate-800 mb-3">
+
+                <button
+                    type="button"
+                    onclick="setSosTiming('now')"
+                    id="sos-timing-now"
+                    class="sos-timing-btn flex-1 py-2 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all"
+                >
+                    Now
+                </button>
+
+                <button
+                    type="button"
+                    onclick="setSosTiming('schedule')"
+                    id="sos-timing-schedule"
+                    class="sos-timing-btn flex-1 py-2 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all"
+                >
+                    Schedule
+                </button>
+
+            </div>
+
+            <input type="hidden" id="sos-timing" value="">
+
+            <div id="sos-schedule-fields" class="hidden flex gap-2 mb-1">
+
+                <input
+                    type="date"
+                    id="sos-date"
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-2.5 text-white text-sm"
+                >
+
+                <input
+                    type="time"
+                    id="sos-time"
+                    class="w-1/2 bg-slate-950 border border-slate-700 rounded p-2.5 text-white text-sm"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- NOTE -->
+
+        <div id="sos-note-section" class="hidden mb-4">
+
+            <div class="flex items-center bg-slate-950 rounded-md border border-slate-700 focus-within:border-red-500 transition-colors">
+
+                <input
+                    type="text"
+                    id="sos-note"
+                    placeholder="Add a quick detail..."
+                    class="flex-grow bg-transparent p-3 text-sm text-white focus:outline-none"
+                >
+
+                <button
+                    type="button"
+                    onclick="startDictation('sos-note')"
+                    class="p-3 text-slate-400 hover:text-amber-400 transition-colors"
+                    title="Voice to Text"
+                >
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+
+            </div>
+
+        </div>
 
         <div class="space-y-3">
 
@@ -885,7 +1029,7 @@ button {
                 onclick="activateBeacon()"
                 class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg text-lg comic-border"
             >
-                Activate Beacon
+                Send SOS
             </button>
 
             <button
@@ -942,6 +1086,42 @@ button {
         </div>
 
     </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- PHOTO LIGHTBOX MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="photoLightbox"
+    class="fixed inset-0 bg-black/95 z-[120] hidden flex flex-col items-center justify-center p-4"
+>
+
+    <button
+        onclick="closeLightbox()"
+        class="absolute top-4 right-4 bg-slate-800 w-10 h-10 rounded-full text-white text-lg shadow z-10"
+    >
+        <i class="fa-solid fa-times"></i>
+    </button>
+
+    <img
+        id="lightbox-img"
+        src=""
+        class="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+        alt="Photo memory"
+    >
+
+    <a
+        id="lightbox-download"
+        href=""
+        download="ferdig4-memory.jpg"
+        class="mt-5 bg-pink-600 hover:bg-pink-500 text-white font-bold px-6 py-3 rounded-full shadow-md active:scale-95 transition flex items-center gap-2"
+    >
+        <i class="fa-solid fa-download"></i>
+        Save to Phone
+    </a>
 
 </div>
 
@@ -1008,6 +1188,12 @@ let state = {
 
 
 const STORAGE_KEY = 'f4_state_v7';
+
+
+// Runtime-only UI state (not persisted)
+let photoEditMode = false;
+let sosType = '';
+let sosTiming = '';
 
 
 /* ========================================================= */
@@ -1251,6 +1437,9 @@ function setRole(r, shouldSave = true) {
 
         });
 
+        // Ally Squad can't be in photo edit mode
+        photoEditMode = false;
+
         if (!document.getElementById('view-bills').classList.contains('hidden')) {
 
             switchTab('dashboard');
@@ -1258,6 +1447,8 @@ function setRole(r, shouldSave = true) {
         }
 
     }
+
+    renderPhotos();
 
     if (shouldSave) saveData();
 
@@ -1880,6 +2071,38 @@ function handlePhotoUpload(e) {
 }
 
 
+function togglePhotoEditMode() {
+
+    // Only parents may enter edit mode
+    if (state.role !== 'parents') return;
+
+    photoEditMode = !photoEditMode;
+
+    const btn = document.getElementById('photo-edit-btn');
+
+    if (photoEditMode) {
+
+        btn.innerHTML =
+            '<i class="fa-solid fa-check"></i><span>Done</span>';
+
+        btn.classList.add('bg-amber-500', 'text-black', 'border-amber-400');
+        btn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
+
+    } else {
+
+        btn.innerHTML =
+            '<i class="fa-solid fa-pen"></i><span>Edit</span>';
+
+        btn.classList.remove('bg-amber-500', 'text-black', 'border-amber-400');
+        btn.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
+
+    }
+
+    renderPhotos();
+
+}
+
+
 function removePhoto(idx) {
 
     if (!confirm('Delete this photo memory?')) return;
@@ -1887,6 +2110,26 @@ function removePhoto(idx) {
     state.photos.splice(idx, 1);
 
     saveData();
+
+}
+
+
+function openLightbox(src) {
+
+    document.getElementById('lightbox-img').src = src;
+
+    document.getElementById('lightbox-download').href = src;
+
+    openModal('photoLightbox');
+
+}
+
+
+function closeLightbox() {
+
+    closeModal('photoLightbox');
+
+    document.getElementById('lightbox-img').src = '';
 
 }
 
@@ -2300,6 +2543,9 @@ function renderPhotos() {
     }
 
 
+    const canDelete = photoEditMode && state.role === 'parents';
+
+
     c.innerHTML =
         state.photos.map(function(p, i) {
 
@@ -2308,16 +2554,23 @@ function renderPhotos() {
 
                     <img
                         src="${p}"
-                        class="object-cover w-full h-full"
+                        onclick="openLightbox('${p}')"
+                        class="object-cover w-full h-full cursor-pointer"
                         alt="Photo memory"
                     >
 
-                    <button
-                        onclick="removePhoto(${i})"
-                        class="absolute top-2 right-2 bg-red-600 w-8 h-8 rounded-full text-white shadow opacity-80 hover:opacity-100"
-                    >
-                        <i class="fa-solid fa-times"></i>
-                    </button>
+                    ${
+                        canDelete
+                            ? `
+                                <button
+                                    onclick="removePhoto(${i})"
+                                    class="absolute top-2 right-2 bg-red-600 w-8 h-8 rounded-full text-white shadow"
+                                >
+                                    <i class="fa-solid fa-times"></i>
+                                </button>
+                              `
+                            : ''
+                    }
 
                 </div>
             `;
@@ -2513,11 +2766,146 @@ function closeModal(id) {
 /* SOS */
 /* ========================================================= */
 
+function resetSosForm() {
+
+    sosType = '';
+    sosTiming = '';
+
+    document.getElementById('sos-type').value = '';
+    document.getElementById('sos-timing').value = '';
+
+    document.querySelectorAll('.sos-type-btn').forEach(function(el) {
+        el.className =
+            "sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all" +
+            (el.id === 'sos-type-other' ? ' col-span-2' : '');
+    });
+
+    document.querySelectorAll('.sos-timing-btn').forEach(function(el) {
+        el.className =
+            "sos-timing-btn flex-1 py-2 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all";
+    });
+
+    document.getElementById('sos-timing-section').classList.add('hidden');
+    document.getElementById('sos-schedule-fields').classList.add('hidden');
+    document.getElementById('sos-note-section').classList.add('hidden');
+
+    document.getElementById('sos-date').value = '';
+    document.getElementById('sos-time').value = '';
+    document.getElementById('sos-note').value = '';
+
+}
+
+
+function setSosType(type) {
+
+    sosType = type;
+
+    document.getElementById('sos-type').value = type;
+
+    document.querySelectorAll('.sos-type-btn').forEach(function(el) {
+        el.className =
+            "sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-slate-700 bg-slate-950 text-slate-300 transition-all" +
+            (el.id === 'sos-type-other' ? ' col-span-2' : '');
+    });
+
+    const btn = document.getElementById(`sos-type-${type}`);
+
+    if (btn) {
+        btn.className =
+            "sos-type-btn flex flex-col items-center justify-center py-3 rounded-lg border-2 border-red-500 bg-red-900/30 text-red-300 scale-[1.03] shadow-md" +
+            (type === 'other' ? ' col-span-2' : '');
+    }
+
+    document.getElementById('sos-timing-section').classList.remove('hidden');
+    document.getElementById('sos-note-section').classList.remove('hidden');
+
+}
+
+
+function setSosTiming(t) {
+
+    sosTiming = t;
+
+    document.getElementById('sos-timing').value = t;
+
+    document.querySelectorAll('.sos-timing-btn').forEach(function(el) {
+        el.className =
+            "sos-timing-btn flex-1 py-2 rounded-full text-sm font-bold text-slate-500 border border-transparent transition-all";
+    });
+
+    const btn = document.getElementById(`sos-timing-${t}`);
+
+    if (btn) {
+        btn.className =
+            "sos-timing-btn flex-1 py-2 rounded-full text-sm font-bold transition-all bg-red-600 text-white shadow-md";
+    }
+
+    const fields = document.getElementById('sos-schedule-fields');
+
+    if (t === 'schedule') {
+
+        fields.classList.remove('hidden');
+
+        if (!document.getElementById('sos-date').value) {
+            document.getElementById('sos-date').value =
+                new Date().toISOString().slice(0, 10);
+        }
+
+    } else {
+
+        fields.classList.add('hidden');
+
+    }
+
+}
+
+
 function activateBeacon() {
+
+    if (!sosType) {
+
+        alert('Please choose what kind of help you need.');
+
+        return;
+
+    }
+
+    const labels = {
+        babysitter: 'Babysitter',
+        help: 'Come Help',
+        ride: 'Need a Ride',
+        doctor: 'Doctor Visit',
+        other: 'Something Else'
+    };
+
+    let summary = `🚨 ${labels[sosType]}`;
+
+    if (sosTiming === 'schedule') {
+
+        const d = document.getElementById('sos-date').value;
+        const t = document.getElementById('sos-time').value;
+
+        if (d || t) {
+            summary += ` — ${d || 'TBD date'} ${t || ''}`.trim();
+        }
+
+    } else if (sosTiming === 'now') {
+
+        summary += ' — Needed Now';
+
+    }
+
+    const note = document.getElementById('sos-note').value.trim();
+
+    if (note) {
+        summary += `\nNote: ${note}`;
+    }
 
     closeModal('sosModal');
 
-    alert('🚨 SOS BEACON ACTIVATED — Ally Squad has been alerted.');
+    resetSosForm();
+
+    alert(`SOS BEACON ACTIVATED\n\n${summary}\n\nThe Ally Squad has been alerted.`);
 
 }
 
@@ -2531,12 +2919,19 @@ document.addEventListener('click', function(e) {
     if (e.target.id === 'sosModal') {
 
         closeModal('sosModal');
+        resetSosForm();
 
     }
 
     if (e.target.id === 'clearLogsModal') {
 
         closeModal('clearLogsModal');
+
+    }
+
+    if (e.target.id === 'photoLightbox') {
+
+        closeLightbox();
 
     }
 
@@ -2554,6 +2949,8 @@ document.addEventListener('keydown', function(e) {
         closeModal('sosModal');
 
         closeModal('clearLogsModal');
+
+        closeLightbox();
 
         closeModal('dictationModal');
 
